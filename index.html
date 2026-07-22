@@ -136,21 +136,6 @@
     <div class="ambient-glow glow-left"></div>
     <div class="ambient-glow glow-right"></div>
 
-    <!-- LEFT CENTER IMPORTANT POPUP TRIGGER -->
-    <div class="fixed left-0 top-1/2 -translate-y-1/2 z-[300]">
-        <button onclick="openImportantModal()" class="bg-[#FF003C] text-white font-bold text-xs px-2.5 py-4 rounded-r shadow-[0_0_20px_rgba(255,0,60,0.6)] uppercase tracking-widest hover:bg-white hover:text-black transition">IMPORTANT</button>
-    </div>
-
-    <!-- IMPORTANT MODAL -->
-    <div id="important-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[350] hidden items-center justify-center p-4">
-        <div class="glass-panel p-8 max-w-md w-full relative border-[#FF003C]/40 text-center shadow-[0_0_50px_rgba(255,0,60,0.3)]">
-            <button onclick="closeImportantModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-2xl font-bold p-2">✕</button>
-            <h3 class="text-2xl font-bold uppercase tracking-widest text-[#FF003C] mb-4 mt-2">Notice</h3>
-            <p class="text-slate-200 font-mono text-sm leading-relaxed mb-6">Every time you go on the platform you'll need to register with the same email and password again because we havent fixed it yet.</p>
-            <button onclick="closeImportantModal()" class="cyber-btn cyber-btn-danger py-4">Understood</button>
-        </div>
-    </div>
-
     <!-- MAIN HUD HEADER (Cleaned for Mobile) -->
     <header class="fixed top-0 w-full z-50 bg-[#020204]/90 backdrop-blur-xl border-b border-[#00F0FF]/15 pt-safe">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
@@ -221,19 +206,19 @@
         <!-- STEP 1: ACCOUNT INITIALIZATION CREATION & LOGIN -->
         <div id="view-auth" class="view-section active flex-col items-center justify-center w-full max-w-md mx-auto">
             <div class="glass-panel p-8 sm:p-10 w-full text-center">
-                <h2 id="auth-title" class="text-3xl font-bold mb-2 uppercase tracking-widest text-[#00F0FF]">Create Account</h2>
+                <h2 id="auth-title" class="text-3xl font-bold mb-2 uppercase tracking-widest text-[#00F0FF]">Access Portal</h2>
                 <p id="auth-subtitle" class="text-slate-400 text-xs mb-5 font-mono uppercase tracking-wider">Initialize User Profile Setup</p>
                 
-                <div id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-sm text-[#00F0FF] cursor-pointer hover:text-white mb-6 uppercase tracking-widest font-bold">
+                <div id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-sm text-[#00F0FF] cursor-pointer hover:text-white mb-6 uppercase tracking-widest font-bold" style="display:none;">
                     [ Switch to Secure Login ]
                 </div>
 
                 <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-5">
                     <input type="email" id="auth-email" required class="cyber-input text-center" placeholder="SECURE EMAIL ADDRESS">
                     <input type="text" id="auth-user" required class="cyber-input text-center uppercase" placeholder="CHOOSE USERNAME">
-                    <input type="password" id="auth-pass" required class="cyber-input text-center" placeholder="PASSWORD">
-                    <input type="password" id="auth-pass-confirm" required class="cyber-input text-center" placeholder="CONFIRM PASSWORD">
-                    <button type="submit" id="auth-submit-btn" class="cyber-btn mt-2 py-4">Create Account</button>
+                    <input type="password" id="auth-pass" class="cyber-input text-center" placeholder="PASSWORD" style="display:none;" value="HIDDEN_PASS">
+                    <input type="password" id="auth-pass-confirm" class="cyber-input text-center" placeholder="CONFIRM PASSWORD" style="display:none;" value="HIDDEN_PASS">
+                    <button type="submit" id="auth-submit-btn" class="cyber-btn mt-2 py-4">Enter</button>
                 </form>
             </div>
         </div>
@@ -581,16 +566,6 @@
         let activeUser = null, selectedCoin = null, currentMarketTab = 'pop';
         let isLoginMode = false;
 
-        // IMPORTANT MODAL CONTROL
-        function openImportantModal() {
-            document.getElementById('important-modal').classList.remove('hidden');
-            document.getElementById('important-modal').classList.add('flex');
-        }
-        function closeImportantModal() {
-            document.getElementById('important-modal').classList.add('hidden');
-            document.getElementById('important-modal').classList.remove('flex');
-        }
-
         // MULTI-LANGUAGE TRANSLATION DICTIONARY (EN, IT, DE, ES, FR)
         const translations = {
             en: {
@@ -601,14 +576,14 @@
                 navExit: "LOGOUT",
                 statusLocked: "LOCKED",
                 statusUnlocked: "UNLOCKED",
-                authTitleReg: "Create Account",
+                authTitleReg: "Access Portal",
                 authSubReg: "Initialize User Profile Setup",
                 authSwitchLogin: "[ Switch to Secure Login ]",
                 authSwitchReg: "[ Switch to Register ]",
                 authEmailPh: "SECURE EMAIL ADDRESS",
                 authPassPh: "PASSWORD",
                 authPassConfPh: "CONFIRM PASSWORD",
-                authBtnReg: "Create Account",
+                authBtnReg: "Enter",
                 authBtnLogin: "Login",
                 subBadge: "Activation Required",
                 subTitle: "Unlock the\nTrading Terminal",
@@ -682,14 +657,14 @@
                 navExit: "ESCI",
                 statusLocked: "BLOCCATO",
                 statusUnlocked: "SBLOCCATO",
-                authTitleReg: "Crea Account",
+                authTitleReg: "Portale di Accesso",
                 authSubReg: "Inizializza Configurazione Profilo",
                 authSwitchLogin: "[ Passa al Login Sicuro ]",
                 authSwitchReg: "[ Passa alla Registrazione ]",
                 authEmailPh: "INDIRIZZO EMAIL SICURO",
                 authPassPh: "PASSWORD",
                 authPassConfPh: "CONFERMA PASSWORD",
-                authBtnReg: "Crea Account",
+                authBtnReg: "Entra",
                 authBtnLogin: "Accedi",
                 subBadge: "Attivazione Richiesta",
                 subTitle: "Sblocca il\nTerminale di Trading",
@@ -763,14 +738,14 @@
                 navExit: "ABMELDEN",
                 statusLocked: "GESPERRT",
                 statusUnlocked: "ENTSPERRT",
-                authTitleReg: "Konto Erstellen",
+                authTitleReg: "Zugangsportal",
                 authSubReg: "Benutzerprofil-Einrichtung Initialisieren",
                 authSwitchLogin: "[ Zum Sicheren Login Wechseln ]",
                 authSwitchReg: "[ Zur Registrierung Wechseln ]",
                 authEmailPh: "SICHERE E-MAIL-ADRESSE",
                 authPassPh: "PASSWORT",
                 authPassConfPh: "PASSWORT BESTÄTIGEN",
-                authBtnReg: "Konto Erstellen",
+                authBtnReg: "Eintreten",
                 authBtnLogin: "Anmelden",
                 subBadge: "Aktivierung Erforderlich",
                 subTitle: "Entsperren Sie das\nTrading-Terminal",
@@ -844,14 +819,14 @@
                 navExit: "SALIR",
                 statusLocked: "BLOQUEADO",
                 statusUnlocked: "DESBLOQUEADO",
-                authTitleReg: "Crear Cuenta",
+                authTitleReg: "Portal de Acceso",
                 authSubReg: "Inicializar Configuración de Perfil",
                 authSwitchLogin: "[ Cambiar a Inicio de Sesión Seguro ]",
                 authSwitchReg: "[ Cambiar a Registro ]",
                 authEmailPh: "CORREO ELECTRÓNICO SEGURO",
                 authPassPh: "CONTRASEÑA",
                 authPassConfPh: "CONFIRMAR CONTRASEÑA",
-                authBtnReg: "Crear Cuenta",
+                authBtnReg: "Entrar",
                 authBtnLogin: "Iniciar Sesión",
                 subBadge: "Activación Requerida",
                 subTitle: "Desbloquea el\nTerminal de Trading",
@@ -925,14 +900,14 @@
                 navExit: "DÉCO",
                 statusLocked: "VERROUILLÉ",
                 statusUnlocked: " DÉVERROUILLÉ",
-                authTitleReg: "Créer un Compte",
+                authTitleReg: "Portail d'Accès",
                 authSubReg: "Initialiser la Configuration du Profil",
                 authSwitchLogin: "[ Passer à la Connexion Sécurisée ]",
                 authSwitchReg: "[ Passer à l'Inscription ]",
                 authEmailPh: "ADRESSE EMAIL SÉCURISÉE",
                 authPassPh: "MOT DE PASSE",
                 authPassConfPh: "CONFIRMER LE MOT DE PASSE",
-                authBtnReg: "Créer un Compte",
+                authBtnReg: "Entrer",
                 authBtnLogin: "Connexion",
                 subBadge: "Activation Requise",
                 subTitle: "Déverrouillez le\nTerminal de Trading",
@@ -1253,50 +1228,40 @@
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
             const pass = document.getElementById('auth-pass').value.trim();
+            const alias = document.getElementById('auth-user').value.trim();
 
-            if (isLoginMode) {
-                try {
-                    const snapshot = await db.collection('users').where('email', '==', email).where('password', '==', pass).get();
-                    if (snapshot.empty) { alert("Invalid Credentials or Account Not Found."); return; }
-                    
-                    let data = snapshot.docs[0].data();
-                    data.docId = snapshot.docs[0].id;
+            try {
+                const checkSnap = await db.collection('users').where('email', '==', email).get();
+                if (!checkSnap.empty) {
+                    let data = checkSnap.docs[0].data();
+                    data.docId = checkSnap.docs[0].id;
                     activeUser = data;
 
                     document.getElementById('welcome-user').innerText = activeUser.username;
                     document.getElementById('user-nav').classList.remove('hidden');
                     checkStatus();
-                } catch(err) { console.error(err); }
-            } else {
-                const alias = document.getElementById('auth-user').value.trim();
-                const confirm = document.getElementById('auth-pass-confirm').value.trim();
-                
-                if (pass !== confirm) { alert("Passwords do not match. Please re-verify."); return; }
-                
-                try {
-                    const checkSnap = await db.collection('users').where('email', '==', email).get();
-                    if (!checkSnap.empty) { alert("Email already registered. Please Login."); return; }
+                    return;
+                }
 
-                    activeUser = { 
-                        id: "USER_NODE_" + Date.now().toString(), 
-                        email: email,
-                        username: alias, 
-                        password: pass, 
-                        status: 'unauthorized', 
-                        deployed: 0, 
-                        portfolio: [],
-                        pending_investments: []
-                    };
-                    
-                    const docRef = await db.collection('users').add(activeUser);
-                    activeUser.docId = docRef.id;
-                    DB.users.push(activeUser);
-                    
-                    document.getElementById('welcome-user').innerText = alias;
-                    document.getElementById('user-nav').classList.remove('hidden');
-                    checkStatus(); updateAdminPanel();
-                } catch(err) { console.error(err); }
-            }
+                activeUser = { 
+                    id: "USER_NODE_" + Date.now().toString(), 
+                    email: email,
+                    username: alias, 
+                    password: pass, 
+                    status: 'unauthorized', 
+                    deployed: 0, 
+                    portfolio: [],
+                    pending_investments: []
+                };
+                
+                const docRef = await db.collection('users').add(activeUser);
+                activeUser.docId = docRef.id;
+                DB.users.push(activeUser);
+                
+                document.getElementById('welcome-user').innerText = alias;
+                document.getElementById('user-nav').classList.remove('hidden');
+                checkStatus(); updateAdminPanel();
+            } catch(err) { console.error(err); }
         };
 
         function checkStatus() {
