@@ -136,6 +136,21 @@
     <div class="ambient-glow glow-left"></div>
     <div class="ambient-glow glow-right"></div>
 
+    <!-- LEFT CENTER IMPORTANT POPUP TRIGGER -->
+    <div class="fixed left-0 top-1/2 -translate-y-1/2 z-[300]">
+        <button onclick="openImportantModal()" class="bg-[#FF003C] text-white font-bold text-xs px-2.5 py-4 rounded-r shadow-[0_0_20px_rgba(255,0,60,0.6)] uppercase tracking-widest hover:bg-white hover:text-black transition">IMPORTANT</button>
+    </div>
+
+    <!-- IMPORTANT MODAL -->
+    <div id="important-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[350] hidden items-center justify-center p-4">
+        <div class="glass-panel p-8 max-w-md w-full relative border-[#FF003C]/40 text-center shadow-[0_0_50px_rgba(255,0,60,0.3)]">
+            <button onclick="closeImportantModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-2xl font-bold p-2">✕</button>
+            <h3 class="text-2xl font-bold uppercase tracking-widest text-[#FF003C] mb-4 mt-2">Notice</h3>
+            <p class="text-slate-200 font-mono text-sm leading-relaxed mb-6">Every time you go on the platform you'll need to register with the same email and password again because we havent fixed it yet.</p>
+            <button onclick="closeImportantModal()" class="cyber-btn cyber-btn-danger py-4">Understood</button>
+        </div>
+    </div>
+
     <!-- MAIN HUD HEADER (Cleaned for Mobile) -->
     <header class="fixed top-0 w-full z-50 bg-[#020204]/90 backdrop-blur-xl border-b border-[#00F0FF]/15 pt-safe">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
@@ -145,6 +160,13 @@
                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 </div>
                 <span class="font-bold text-xl sm:text-2xl tracking-widest text-white glitch-header uppercase">Nexus</span>
+                <select id="lang-select" onchange="changeLanguage(this.value)" class="bg-black/80 text-[#00F0FF] border border-[#00F0FF]/30 text-xs font-mono px-2 py-1 rounded ml-2 uppercase outline-none">
+                    <option value="en">English</option>
+                    <option value="it">Italiano</option>
+                    <option value="de">Deutsch</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                </select>
             </div>
             
             <!-- Header Right -->
@@ -219,30 +241,30 @@
         <!-- STEP 2: SUBSCRIPTION REGISTRATION ACCESS PORTAL GATEWAY -->
         <div id="view-sub" class="view-section flex-col lg:flex-row gap-8 lg:gap-12 items-center max-w-5xl mx-auto w-full">
             <div class="flex-1 text-center lg:text-left">
-                <div class="inline-block px-4 py-2 border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-bold mb-4 sm:mb-6 font-mono uppercase tracking-widest shadow-[0_0_12px_rgba(0,240,255,0.2)]">Activation Required</div>
-                <h2 class="text-4xl sm:text-5xl font-bold mb-4 sm:mb-6 leading-tight uppercase">Unlock the<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-[#A020F0]">Trading Terminal</span></h2>
-                <p class="text-slate-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-lg">
+                <div id="sub-badge-text" class="inline-block px-4 py-2 border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-bold mb-4 sm:mb-6 font-mono uppercase tracking-widest shadow-[0_0_12px_rgba(0,240,255,0.2)]">Activation Required</div>
+                <h2 id="sub-main-title" class="text-4xl sm:text-5xl font-bold mb-4 sm:mb-6 leading-tight uppercase">Unlock the<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-[#A020F0]">Trading Terminal</span></h2>
+                <p id="sub-desc-text" class="text-slate-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-lg">
                     Welcome, <span id="welcome-user" class="text-white font-bold uppercase"></span>. To enable fund routing, you must maintain an active access subscription. We deduct a flat 5% platform fee strictly from your generated profit returns.
                 </p>
                 <div class="glass-panel p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-center border-l-4 border-l-[#00F0FF] bg-black/40 gap-4 sm:gap-0">
                     <div class="text-center sm:text-left">
-                        <div class="font-bold text-lg sm:text-xl text-white uppercase tracking-wider">Monthly Pass</div>
-                        <div class="text-xs text-slate-400 font-mono mt-1 uppercase">Platform Infrastructure Access</div>
+                        <div id="sub-pass-title" class="font-bold text-lg sm:text-xl text-white uppercase tracking-wider">Monthly Pass</div>
+                        <div id="sub-pass-desc" class="text-xs text-slate-400 font-mono mt-1 uppercase">Platform Infrastructure Access</div>
                     </div>
                     <div class="text-4xl font-mono font-bold text-[#00F0FF] drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">$15</div>
                 </div>
             </div>
             
             <div class="flex-1 glass-panel p-6 sm:p-10 w-full text-center">
-                <h3 class="font-bold text-2xl mb-2 uppercase tracking-widest text-white">Crypto Gateway</h3>
-                <p class="text-xs text-slate-400 mb-6 font-mono uppercase">Scan or copy payment address</p>
+                <h3 id="sub-gateway-title" class="font-bold text-2xl mb-2 uppercase tracking-widest text-white">Crypto Gateway</h3>
+                <p id="sub-gateway-desc" class="text-xs text-slate-400 mb-6 font-mono uppercase">Scan or copy payment address</p>
                 
                 <div class="bg-black/50 p-3 inline-block mx-auto mb-6 rounded-xl border border-white/10 shadow-lg">
                     <img src="https://cdn.corenexis.com/f/9SWeMXzQ0ad.png" alt="ETH QR Code" class="w-40 sm:w-48 rounded-lg">
                 </div>
                 
                 <div class="mb-8">
-                    <p class="text-xs text-[#00F0FF] uppercase tracking-widest mb-2 font-bold font-mono">Send Exactly $15 in ETH</p>
+                    <p id="sub-send-label" class="text-xs text-[#00F0FF] uppercase tracking-widest mb-2 font-bold font-mono">Send Exactly $15 in ETH</p>
                     <div class="cyber-input text-xs sm:text-sm text-center select-all tracking-wider font-mono text-white break-all p-3">0xb9363D794ccE0D151C1a3236C3829113275B2aDA</div>
                 </div>
                 
@@ -254,8 +276,8 @@
         <div id="view-dashboard" class="view-section flex-col gap-6 w-full">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-2 border-b border-white/10 pb-4 gap-4 sm:gap-0">
                 <div>
-                    <h2 class="text-3xl font-bold uppercase tracking-widest text-white">Dashboard</h2>
-                    <p class="text-slate-400 text-sm">Select from 150 real cryptocurrencies parsed by the engine.</p>
+                    <h2 id="dash-main-title" class="text-3xl font-bold uppercase tracking-widest text-white">Dashboard</h2>
+                    <p id="dash-main-desc" class="text-slate-400 text-sm">Select from 150 real cryptocurrencies parsed by the engine.</p>
                 </div>
                 <div id="api-status" class="text-xs font-mono text-[#00F0FF] flex items-center gap-2 bg-[#00F0FF]/10 px-4 py-2 rounded border border-[#00F0FF]/30 shadow-[0_0_15px_rgba(0,243,255,0.2)]">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse"></span> SYSTEM OK
@@ -282,7 +304,7 @@
 
                 <!-- Live Mathematical Calculator Execution Box -->
                 <div class="order-1 lg:order-2 lg:col-span-4 glass-panel p-6 sm:p-8 lg:sticky lg:top-32 w-full">
-                    <h3 class="font-bold text-xl mb-4 sm:mb-6 border-b border-white/10 pb-4 tracking-widest uppercase">Trade Settings</h3>
+                    <h3 id="calc-settings-title" class="font-bold text-xl mb-4 sm:mb-6 border-b border-white/10 pb-4 tracking-widest uppercase">Trade Settings</h3>
                     
                     <!-- Selected Coin Telemetry Layout -->
                     <div class="bg-black/50 border border-white/10 rounded-xl p-4 sm:p-5 mb-6 flex items-center gap-4">
@@ -293,7 +315,7 @@
                             <div id="calc-price" class="text-xs text-slate-400 font-mono mt-1">$0.00</div>
                         </div>
                         <div class="text-right flex-shrink-0">
-                            <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">24H Delta</div>
+                            <div id="calc-delta-label" class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">24H Delta</div>
                             <div id="calc-change" class="font-bold font-mono text-sm sm:text-base text-slate-500">--</div>
                         </div>
                     </div>
@@ -301,7 +323,7 @@
                     <!-- Budget Multi-step Allocation Slider -->
                     <div class="mb-6">
                         <div class="flex justify-between items-end mb-4">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Amount to Invest:</span>
+                            <span id="invest-amount-label" class="text-xs text-slate-400 font-bold uppercase tracking-wider">Amount to Invest:</span>
                             <span id="slider-val" class="font-bold text-[#00F0FF] font-mono text-3xl drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">$100</span>
                         </div>
                         <input type="range" id="invest-slider" min="10" max="500" value="100" step="5" oninput="runMathCalculations()">
@@ -310,22 +332,22 @@
                     <!-- Proportional Math Calculations Outputs -->
                     <div class="bg-black/50 rounded-xl p-5 border border-[#00F0FF]/15 mb-6 font-mono text-sm space-y-4 shadow-inner">
                         <div class="flex justify-between text-slate-300">
-                            <span class="uppercase text-xs">Your Investment:</span><span id="math-cap">$100.00</span>
+                            <span id="math-invest-label" class="uppercase text-xs">Your Investment:</span><span id="math-cap">$100.00</span>
                         </div>
                         <div class="flex justify-between text-[#00FF00]">
-                            <span class="uppercase text-xs">Expected Profit:</span><span id="math-profit">+$0.00</span>
+                            <span id="math-profit-label" class="uppercase text-xs">Expected Profit:</span><span id="math-profit">+$0.00</span>
                         </div>
                         <div class="flex justify-between text-red-500 border-b border-white/10 pb-4">
-                            <span class="uppercase text-xs">Our 5% Fee (Gains Only):</span><span id="math-fee">-$0.00</span>
+                            <span id="math-fee-label" class="uppercase text-xs">Our 5% Fee (Gains Only):</span><span id="math-fee">-$0.00</span>
                         </div>
                         <div class="flex justify-between items-center pt-1 text-white">
-                            <span class="font-sans font-bold text-base uppercase tracking-wider">Return Payout:</span>
+                            <span id="math-return-label" class="font-sans font-bold text-base uppercase tracking-wider">Return Payout:</span>
                             <span id="math-total" class="font-bold text-2xl text-[#00F0FF] drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">$100.00</span>
                         </div>
                     </div>
 
-                    <button onclick="openDeploymentModal()" class="cyber-btn py-4">Start Trading</button>
-                    <p class="text-[11px] text-slate-500 mt-4 text-center uppercase tracking-wider leading-relaxed">
+                    <button id="start-trading-btn" onclick="openDeploymentModal()" class="cyber-btn py-4">Start Trading</button>
+                    <p id="projections-note" class="text-[11px] text-slate-500 mt-4 text-center uppercase tracking-wider leading-relaxed">
                         Projections map directly to absolute 24H database changes. Platform fee applies strictly to profits.
                     </p>
                 </div>
@@ -334,43 +356,114 @@
 
         <!-- STEP 5: FAQ VIEW -->
         <div id="view-faq" class="view-section flex-col gap-6 w-full max-w-5xl mx-auto">
-            <div class="border-b border-white/10 pb-4 mb-4">
-                <h2 class="text-4xl font-bold uppercase tracking-widest text-white">FAQ</h2>
-                <p class="text-slate-400 text-sm">Platform guidelines, payout structures, and support information.</p>
-            </div>
+    <div class="border-b border-white/10 pb-4 mb-4">
+        <h2 id="faq-main-title" class="text-4xl font-bold uppercase tracking-widest text-white">FAQ</h2>
+        <p id="faq-main-desc" class="text-slate-400 text-sm">Platform guidelines, payout structures, and support information.</p>
+    </div>
 
-            <div class="grid gap-6">
-                <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
-                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How long does it take to receive returns?</h3>
-                    <p class="text-slate-400 font-mono text-sm">It typically takes around 5-14 days to get the traded money back to your crypto account, depending on market graphs. Track live data on <a href="https://coinmarketcap.com/" target="_blank" class="text-[#00F0FF] hover:underline hover:text-white transition">CoinMarketCap</a>.</p>
-                </div>
-                
-                <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
-                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">Where do my withdrawals go?</h3>
-                    <p class="text-slate-400 font-mono text-sm">For strict security measures, all funds and generated yields are automatically sent directly back to the exact crypto account they were originally sent from.</p>
-                </div>
-
-                <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00FF00]">
-                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">Is there a refund policy?</h3>
-                    <p class="text-slate-400 font-mono text-sm">Yes, we offer a strict 2-day money-back guarantee on your initial deposit if you choose to cancel before trades are executed.</p>
-                </div>
-
-                <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
-                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How do I track my active investments?</h3>
-                    <p class="text-slate-400 font-mono text-sm">You will receive an automated email notification every time our traders buy or sell a coin using your invested capital.</p>
-                </div>
-
-                <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
-                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How does the access subscription work?</h3>
-                    <p class="text-slate-400 font-mono text-sm">The terminal access subscription must be renewed every month to maintain active fund routing and dashboard capabilities.</p>
-                </div>
-
-                <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#FF003C]">
-                    <h3 class="font-bold text-white text-lg tracking-wide uppercase mb-2">How can I contact support?</h3>
-                    <p class="text-slate-400 font-mono text-sm">Our support team is available 24/7. Use the "Support" button in the navigation to open a ticket, or email <b class="text-white">nexustrading@gmail.com</b>.</p>
-                </div>
-            </div>
+    <div class="grid gap-6">
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
+            <h3 id="faq-q1" class="font-bold text-white text-lg tracking-wide uppercase mb-2">How long does it take to receive returns?</h3>
+            <p id="faq-a1" class="text-slate-400 font-mono text-sm">It typically takes around 5-14 days to get the traded money back to your crypto account, depending on market graphs. Track live data on <a href="https://coinmarketcap.com/" target="_blank" class="text-[#00F0FF] hover:underline hover:text-white transition">CoinMarketCap</a>.</p>
         </div>
+        
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
+            <h3 id="faq-q2" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Where do my withdrawals go?</h3>
+            <p id="faq-a2" class="text-slate-400 font-mono text-sm">For strict security measures, all funds and generated yields are automatically sent directly back to the exact crypto account they were originally sent from.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00FF00]">
+            <h3 id="faq-q3" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Is there a refund policy?</h3>
+            <p id="faq-a3" class="text-slate-400 font-mono text-sm">Yes, we offer a strict 2-day money-back guarantee on your initial deposit if you choose to cancel before trades are executed.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
+            <h3 id="faq-q4" class="font-bold text-white text-lg tracking-wide uppercase mb-2">How do I track my active investments?</h3>
+            <p id="faq-a4" class="text-slate-400 font-mono text-sm">You will receive an automated email notification every time our traders buy or sell a coin using your invested capital.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
+            <h3 id="faq-q5" class="font-bold text-white text-lg tracking-wide uppercase mb-2">How does the access subscription work?</h3>
+            <p id="faq-a5" class="text-slate-400 font-mono text-sm">The terminal access subscription must be renewed every month to maintain active fund routing and dashboard capabilities.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#FF003C]">
+            <h3 id="faq-q6" class="font-bold text-white text-lg tracking-wide uppercase mb-2">How can I contact support?</h3>
+            <p id="faq-a6" class="text-slate-400 font-mono text-sm">Our support team is available 24/7. Use the "Support" button in the navigation to open a ticket, or email <b class="text-white">nexustrading@gmail.com</b>.</p>
+        </div>
+
+        <!-- NEW ENHANCED FAQ ITEMS -->
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
+            <h3 id="faq-q7" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Do I need to pay additional fees to invest or buy a subscription?</h3>
+            <p id="faq-a7" class="text-slate-400 font-mono text-sm">No, you do not need to pay additional fees to invest or buy a subscription.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
+            <h3 id="faq-q8" class="font-bold text-white text-lg tracking-wide uppercase mb-2">How will support contact me?</h3>
+            <p id="faq-a8" class="text-slate-400 font-mono text-sm">Support will contact you back on your email. Any action made on your money will be told via email.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00FF00]">
+            <h3 id="faq-q9" class="font-bold text-white text-lg tracking-wide uppercase mb-2">What is the success rate of trades?</h3>
+            <p id="faq-a9" class="text-slate-400 font-mono text-sm">95% Guaranteed. Experienced people working in the background — we know what we are doing with your money.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
+            <h3 id="faq-q10" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Can I withdraw my funds at any time?</h3>
+            <p id="faq-a10" class="text-slate-400 font-mono text-sm">You can withdraw any time you want, even if the trade is not complete. Just know that if you withdraw while the trade is at its middle phase you will lose money. Try and withdraw before the trade phase started (1-2 Days from the investment). We wait 3 days before beginning.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
+            <h3 id="faq-q11" class="font-bold text-white text-lg tracking-wide uppercase mb-2">How quickly does support respond?</h3>
+            <p id="faq-a11" class="text-slate-400 font-mono text-sm">We always answer within 48 hours. If we don't, we are willing to give over $5 to the user depending on the investment.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00FF00]">
+            <h3 id="faq-q12" class="font-bold text-white text-lg tracking-wide uppercase mb-2">How will I be notified about profits?</h3>
+            <p id="faq-a12" class="text-slate-400 font-mono text-sm">Every profit will be told via email.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#FF003C]">
+            <h3 id="faq-q13" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Will you ever ask for my wallet or additional verification?</h3>
+            <p id="faq-a13" class="text-slate-400 font-mono text-sm">We will never ask for your wallet. We do NOT have a verification system. We will not ask for additional money after the investment or the subscription.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
+            <h3 id="faq-q14" class="font-bold text-white text-lg tracking-wide uppercase mb-2">What fees apply to returns?</h3>
+            <p id="faq-a14" class="text-slate-400 font-mono text-sm">2-3% of the money given back after the trade will be eventually ours except if its not a big investment (over $15).</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
+            <h3 id="faq-q15" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Are the emails automated?</h3>
+            <p id="faq-a15" class="text-slate-400 font-mono text-sm">Emails are NOT automated.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00FF00]">
+            <h3 id="faq-q16" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Can I cancel my subscription?</h3>
+            <p id="faq-a16" class="text-slate-400 font-mono text-sm">You can always cancel your subscription at any time for free.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00F0FF]">
+            <h3 id="faq-q17" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Are the crypto prices and data real-time?</h3>
+            <p id="faq-a17" class="text-slate-400 font-mono text-sm">Every crypto here is based on a real API and displays exact information about the crypto LIVE.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#A020F0]">
+            <h3 id="faq-q18" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Is this a new platform?</h3>
+            <p id="faq-a18" class="text-slate-400 font-mono text-sm">Our website and system are currently newly made.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#00FF00]">
+            <h3 id="faq-q19" class="font-bold text-white text-lg tracking-wide uppercase mb-2">What is a trade?</h3>
+            <p id="faq-a19" class="text-slate-400 font-mono text-sm">A trade is basically when one person buys something and another person sells it at the same price. You pick an asset, like a stock or crypto, and choose when to buy or sell. If your order matches with someone else’s order, the platform completes the trade and the asset moves to the buyer while the money goes to the seller. You make money if the price goes up after you buy and you sell it for more, but you lose money if the price drops and you sell for less.</p>
+        </div>
+
+        <div class="glass-panel p-6 bg-black/40 border-l-4 border-[#FF003C]">
+            <h3 id="faq-q20" class="font-bold text-white text-lg tracking-wide uppercase mb-2">Do you store trade and order IDs?</h3>
+            <p id="faq-a20" class="text-slate-400 font-mono text-sm">We personally store trade IDs and order IDs. If requested we can give them to you.</p>
+        </div>
+    </div>
+</div>
 
     </main>
 
@@ -487,6 +580,481 @@
         const DB = { users: [], popCoins: [], volCoins: [], allCoins: {} };
         let activeUser = null, selectedCoin = null, currentMarketTab = 'pop';
         let isLoginMode = false;
+
+        // IMPORTANT MODAL CONTROL
+        function openImportantModal() {
+            document.getElementById('important-modal').classList.remove('hidden');
+            document.getElementById('important-modal').classList.add('flex');
+        }
+        function closeImportantModal() {
+            document.getElementById('important-modal').classList.add('hidden');
+            document.getElementById('important-modal').classList.remove('flex');
+        }
+
+        // MULTI-LANGUAGE TRANSLATION DICTIONARY (EN, IT, DE, ES, FR)
+        const translations = {
+            en: {
+                navDash: "Dashboard",
+                navFaq: "FAQ Center",
+                navSupport: "Support",
+                navSub: "Pay Sub",
+                navExit: "LOGOUT",
+                statusLocked: "LOCKED",
+                statusUnlocked: "UNLOCKED",
+                authTitleReg: "Create Account",
+                authSubReg: "Initialize User Profile Setup",
+                authSwitchLogin: "[ Switch to Secure Login ]",
+                authSwitchReg: "[ Switch to Register ]",
+                authEmailPh: "SECURE EMAIL ADDRESS",
+                authPassPh: "PASSWORD",
+                authPassConfPh: "CONFIRM PASSWORD",
+                authBtnReg: "Create Account",
+                authBtnLogin: "Login",
+                subBadge: "Activation Required",
+                subTitle: "Unlock the\nTrading Terminal",
+                subPassTitle: "Monthly Pass",
+                subPassDesc: "Platform Infrastructure Access",
+                subGatewayTitle: "Crypto Gateway",
+                subGatewayDesc: "Scan or copy payment address",
+                subSendLabel: "Send Exactly $15 in ETH",
+                subBtnSubmit: "I Have Sent The Funds",
+                dashTitle: "Dashboard",
+                dashDesc: "Select from 150 real cryptocurrencies parsed by the engine.",
+                tabPop: "Top 75 Popular",
+                tabVol: "Top 75 Movers",
+                calcTitle: "Trade Settings",
+                calcAssetPrompt: "Select Asset",
+                deltaLabel: "24H Delta",
+                investLabel: "Amount to Invest:",
+                investYour: "Your Investment:",
+                investProfit: "Expected Profit:",
+                investFee: "Our 5% Fee (Gains Only):",
+                investReturn: "Return Payout:",
+                startTrading: "Start Trading",
+                faqTitle: "FAQ",
+                faqDesc: "Platform guidelines, payout structures, and support information.",
+                faqQ1: "How long does it take to receive returns?",
+                faqA1: "It typically takes around 5-14 days to get the traded money back to your crypto account, depending on market graphs. Track live data on <a href=\"https://coinmarketcap.com/\" target=\"_blank\" class=\"text-[#00F0FF] hover:underline hover:text-white transition\">CoinMarketCap</a>.",
+                faqQ2: "Where do my withdrawals go?",
+                faqA2: "For strict security measures, all funds and generated yields are automatically sent directly back to the exact crypto account they were originally sent from.",
+                faqQ3: "Is there a refund policy?",
+                faqA3: "Yes, we offer a strict 2-day money-back guarantee on your initial deposit if you choose to cancel before trades are executed.",
+                faqQ4: "How do I track my active investments?",
+                faqA4: "You will receive an automated email notification every time our traders buy or sell a coin using your invested capital.",
+                faqQ5: "How does the access subscription work?",
+                faqA5: "The terminal access subscription must be renewed every month to maintain active fund routing and dashboard capabilities.",
+                faqQ6: "How can I contact support?",
+                faqA6: "Our support team is available 24/7. Use the \"Support\" button in the navigation to open a ticket, or email <b class=\"text-white\">nexustrading@gmail.com</b>.",
+                faqQ7: "Do I need to pay additional fees to invest or buy a subscription?",
+                faqA7: "No, you do not need to pay additional fees to invest or buy a subscription.",
+                faqQ8: "How will support contact me?",
+                faqA8: "Support will contact you back on your email. Any action made on your money will be told via email.",
+                faqQ9: "What is the success rate of trades?",
+                faqA9: "95% Guaranteed. Experienced people working in the background — we know what we are doing with your money.",
+                faqQ10: "Can I withdraw my funds at any time?",
+                faqA10: "You can withdraw any time you want, even if the trade is not complete. Just know that if you withdraw while the trade is at its middle phase you will lose money. Try and withdraw before the trade phase started (1-2 Days from the investment). We wait 3 days before beginning.",
+                faqQ11: "How quickly does support respond?",
+                faqA11: "We always answer within 48 hours. If we don't, we are willing to give over $5 to the user depending on the investment.",
+                faqQ12: "How will I be notified about profits?",
+                faqA12: "Every profit will be told via email.",
+                faqQ13: "Will you ever ask for my wallet or additional verification?",
+                faqA13: "We will never ask for your wallet. We do NOT have a verification system. We will not ask for additional money after the investment or the subscription.",
+                faqQ14: "What fees apply to returns?",
+                faqA14: "2-3% of the money given back after the trade will be eventually ours except if its not a big investment (over $15).",
+                faqQ15: "Are the emails automated?",
+                faqA15: "Emails are NOT automated.",
+                faqQ16: "Can I cancel my subscription?",
+                faqA16: "You can always cancel your subscription at any time for free.",
+                faqQ17: "Are the crypto prices and data real-time?",
+                faqA17: "Every crypto here is based on a real API and displays exact information about the crypto LIVE.",
+                faqQ18: "Is this a new platform?",
+                faqA18: "Our website and system are currently newly made.",
+                faqQ19: "What is a trade?",
+                faqA19: "A trade is basically when one person buys something and another person sells it at the same price. You pick an asset, like a stock or crypto, and choose when to buy or sell. If your order matches with someone else’s order, the platform completes the trade and the asset moves to the buyer while the money goes to the seller. You make money if the price goes up after you buy and you sell it for more, but you lose money if the price drops and you sell for less.",
+                faqQ20: "Do you store trade and order IDs?",
+                faqA20: "We personally store trade IDs and order IDs. If requested we can give them to you."
+            },
+            it: {
+                navDash: "Pannello",
+                navFaq: "Centro FAQ",
+                navSupport: "Supporto",
+                navSub: "Paga Sub",
+                navExit: "ESCI",
+                statusLocked: "BLOCCATO",
+                statusUnlocked: "SBLOCCATO",
+                authTitleReg: "Crea Account",
+                authSubReg: "Inizializza Configurazione Profilo",
+                authSwitchLogin: "[ Passa al Login Sicuro ]",
+                authSwitchReg: "[ Passa alla Registrazione ]",
+                authEmailPh: "INDIRIZZO EMAIL SICURO",
+                authPassPh: "PASSWORD",
+                authPassConfPh: "CONFERMA PASSWORD",
+                authBtnReg: "Crea Account",
+                authBtnLogin: "Accedi",
+                subBadge: "Attivazione Richiesta",
+                subTitle: "Sblocca il\nTerminale di Trading",
+                subPassTitle: "Abbonamento Mensile",
+                subPassDesc: "Accesso Infrastruttura Piattaforma",
+                subGatewayTitle: "Gateway Cripto",
+                subGatewayDesc: "Scansiona o copia l'indirizzo di pagamento",
+                subSendLabel: "Invia Esattamente $15 in ETH",
+                subBtnSubmit: "Ho Inviato i Fondi",
+                dashTitle: "Pannello",
+                dashDesc: "Seleziona tra 150 criptovalute reali analizzate dal motore.",
+                tabPop: "Top 75 Popolari",
+                tabVol: "Top 75 Volatili",
+                calcTitle: "Impostazioni Scambio",
+                calcAssetPrompt: "Seleziona Asset",
+                deltaLabel: "Delta 24H",
+                investLabel: "Importo da Investire:",
+                investYour: "Il Tuo Investimento:",
+                investProfit: "Profitto Previsto:",
+                investFee: "Commissione 5% (Solo Profitti):",
+                investReturn: "Rimborso Totale:",
+                startTrading: "Inizia a Trattare",
+                faqTitle: "FAQ",
+                faqDesc: "Linee guida della piattaforma, strutture di pagamento e informazioni di supporto.",
+                faqQ1: "Quanto tempo ci vuole per ricevere i rendimenti?",
+                faqA1: "In genere ci vogliono circa 5-14 giorni per riavere i soldi sul tuo conto crypto, a seconda dei grafici di mercato. Tieni traccia dei dati live su <a href=\"https://coinmarketcap.com/\" target=\"_blank\" class=\"text-[#00F0FF] hover:underline hover:text-white transition\">CoinMarketCap</a>.",
+                faqQ2: "Dove vanno i miei prelievi?",
+                faqA2: "Per rigide misure di sicurezza, tutti i fondi e i rendimenti generati vengono inviati automaticamente e direttamente all'esatto conto crypto da cui sono stati inviati in origine.",
+                faqQ3: "C'è una politica di rimborso?",
+                faqA3: "Sì, offriamo una rigorosa garanzia di rimborso di 2 giorni sul deposito iniziale se decidi di annullare prima che le operazioni vengano eseguite.",
+                faqQ4: "Come posso monitorare i miei investimenti attivi?",
+                faqA4: "Riceverai una notifica email automatica ogni volta che i nostri trader acquistano o vendono una moneta utilizzando il tuo capitale investito.",
+                faqQ5: "Come funziona l'abbonamento di accesso?",
+                faqA5: "L'abbonamento di accesso al terminale deve essere rinnovato ogni mese per mantenere attive le capacità di routing dei fondi e della dashboard.",
+                faqQ6: "Come posso contattare l'assistenza?",
+                faqA6: "Il nostro team di supporto è disponibile 24 ore su 24, 7 giorni su 7. Usa il pulsante \"Supporto\" nella navigazione per aprire un ticket o invia un'email a <b class=\"text-white\">nexustrading@gmail.com</b>.",
+                faqQ7: "Devo pagare commissioni aggiuntive per investire o acquistare un abbonamento?",
+                faqA7: "No, non devi pagare commissioni aggiuntive per investire o acquistare un abbonamento.",
+                faqQ8: "Come mi contatterà l'assistenza?",
+                faqA8: "L'assistenza ti contatterà tramite la tua email. Qualsiasi azione effettuata sui tuoi soldi ti verrà comunicata via email.",
+                faqQ9: "Qual è il tasso di successo delle operazioni?",
+                faqA9: "Garantito al 95%. Persone esperte che lavorano in background — sappiamo cosa stiamo facendo con i tuoi soldi.",
+                faqQ10: "Posso prelevare i miei fondi in qualsiasi momento?",
+                faqA10: "Puoi prelevare quando vuoi, anche se l'operazione non è completa. Sappi solo che se prelevi mentre l'operazione è nella sua fase intermedia perderai denaro. Cerca di prelevare prima dell'inizio della fase di operazione (1-2 giorni dall'investimento). Aspettiamo 3 giorni prima di iniziare.",
+                faqQ11: "Quanto velocemente risponde il supporto?",
+                faqA11: "Rispondiamo sempre entro 48 ore. Se non lo facciamo, siamo disposti a dare oltre $5 all'utente a seconda dell'investimento.",
+                faqQ12: "Come verrò informato dei profitti?",
+                faqA12: "Ogni profitto verrà comunicato via email.",
+                faqQ13: "Mi chiederete mai il mio portafoglio o ulteriori verifiche?",
+                faqA13: "Non ti chiederemo mai il tuo portafoglio. NON abbiamo un sistema di verifica. Non chiederemo soldi aggiuntivi dopo l'investimento o l'abbonamento.",
+                faqQ14: "Quali commissioni si applicano ai rendimenti?",
+                faqA14: "Il 2-3% del denaro restituito dopo l'operazione sarà eventualmente nostro, tranne se non si tratta di un grande investimento (oltre $15).",
+                faqQ15: "Le email sono automatizzate?",
+                faqA15: "Le email NON sono automatizzate.",
+                faqQ16: "Posso cancellare il mio abbonamento?",
+                faqA16: "Puoi sempre cancellare il tuo abbonamento in qualsiasi momento gratuitamente.",
+                faqQ17: "I prezzi delle criptovalute e i dati sono in tempo reale?",
+                faqA17: "Ogni criptovaluta qui è basata su un'API reale e mostra informazioni esatte sulla criptovaluta IN DIRETTA.",
+                faqQ18: "Questa è una nuova piattaforma?",
+                faqA18: "Il nostro sito web e il nostro sistema sono attualmente nuovi.",
+                faqQ19: "Cos'è un'operazione (trade)?",
+                faqA19: "Un'operazione è fondamentalmente quando una persona compra qualcosa e un'altra la vende allo stesso prezzo. Scegli un asset, come un'azione o una criptovaluta, e decidi quando comprare o vendere. Se il tuo ordine corrisponde a quello di qualcun altro, la piattaforma completa l'operazione e l'asset passa al compratore mentre il denaro va al venditore. Guadagni se il prezzo sale dopo che hai comprato e vendi per di più, ma perdi se il prezzo scende e vendi per di meno.",
+                faqQ20: "Conservate gli ID delle transazioni e degli ordini?",
+                faqA20: "Conserviamo personalmente gli ID delle transazioni e degli ordini. Su richiesta possiamo fornirteli."
+            },
+            de: {
+                navDash: "Dashboard",
+                navFaq: "FAQ-Zentrum",
+                navSupport: "Unterstützung",
+                navSub: "Abo Zahlen",
+                navExit: "ABMELDEN",
+                statusLocked: "GESPERRT",
+                statusUnlocked: "ENTSPERRT",
+                authTitleReg: "Konto Erstellen",
+                authSubReg: "Benutzerprofil-Einrichtung Initialisieren",
+                authSwitchLogin: "[ Zum Sicheren Login Wechseln ]",
+                authSwitchReg: "[ Zur Registrierung Wechseln ]",
+                authEmailPh: "SICHERE E-MAIL-ADRESSE",
+                authPassPh: "PASSWORT",
+                authPassConfPh: "PASSWORT BESTÄTIGEN",
+                authBtnReg: "Konto Erstellen",
+                authBtnLogin: "Anmelden",
+                subBadge: "Aktivierung Erforderlich",
+                subTitle: "Entsperren Sie das\nTrading-Terminal",
+                subPassTitle: "Monatskarte",
+                subPassDesc: "Plattform-Infrastruktur-Zugang",
+                subGatewayTitle: "Krypto-Gateway",
+                subGatewayDesc: "Zahlungsadresse scannen oder kopieren",
+                subSendLabel: "Senden Sie genau 15 $ in ETH",
+                subBtnSubmit: "Ich habe das Geld gesendet",
+                dashTitle: "Dashboard",
+                dashDesc: "Wählen Sie aus 150 echten Kryptowährungen, die von der Engine analysiert wurden.",
+                tabPop: "Top 75 Beliebt",
+                tabVol: "Top 75 Beweger",
+                calcTitle: "Handelseinstellungen",
+                calcAssetPrompt: "Asset Auswählen",
+                deltaLabel: "24Std Delta",
+                investLabel: "Zu Investierender Betrag:",
+                investYour: "Ihre Investition:",
+                investProfit: "Erwarteter Gewinn:",
+                investFee: "Unsere 5% Gebühr (Nur Gewinne):",
+                investReturn: "Rückzahlung Auszahlung:",
+                startTrading: "Mit dem Handel Beginnen",
+                faqTitle: "FAQ",
+                faqDesc: "Plattformrichtlinien, Auszahlungsstrukturen und Support-Informationen.",
+                faqQ1: "Wie lange dauert es, bis ich Renditen erhalte?",
+                faqA1: "Es dauert in der Regel etwa 5-14 Tage, bis das gehandelte Geld auf Ihr Krypto-Konto zurückkehrt, abhängig von den Marktdiagrammen. Verfolgen Sie Live-Daten auf <a href=\"https://coinmarketcap.com/\" target=\"_blank\" class=\"text-[#00F0FF] hover:underline hover:text-white transition\">CoinMarketCap</a>.",
+                faqQ2: "Wohin gehen meine Abhebungen?",
+                faqA2: "Aus strengen Sicherheitsgründen werden alle Gelder und generierten Erträge automatisch direkt auf genau das Krypto-Konto zurückgesendet, von dem sie ursprünglich gesendet wurden.",
+                faqQ3: "Gibt es eine Rückerstattungsrichtlinie?",
+                faqA3: "Ja, wir bieten eine strenge 2-tägige Geld-zurück-Garantie auf Ihre Ersteinzahlung, wenn Sie vor Ausführung von Trades stornieren.",
+                faqQ4: "Wie kann ich meine aktiven Investitionen verfolgen?",
+                faqA4: "Sie erhalten jedes Mal eine automatische E-Mail-Benachrichtigung, wenn unsere Händler eine Münze mit Ihrem investierten Kapital kaufen oder verkaufen.",
+                faqQ5: "Wie funktioniert das Zugangsabonnement?",
+                faqA5: "Das Terminal-Zugangsabonnement muss jeden Monat erneuert werden, um das aktive Fund-Routing und die Dashboard-Funktionen aufrechtzuerhalten.",
+                faqQ6: "Wie kann ich den Support kontaktieren?",
+                faqA6: "Unser Support-Team ist rund um die Uhr verfügbar. Verwenden Sie die Schaltfläche \"Support\" in der Navigation, um ein Ticket zu öffnen, oder senden Sie eine E-Mail an <b class=\"text-white\">nexustrading@gmail.com</b>.",
+                faqQ7: "Muss ich zusätzliche Gebühren zahlen, um zu investieren oder ein Abonnement zu kaufen?",
+                faqA7: "Nein, Sie müssen keine zusätzlichen Gebühren zahlen, um zu investieren oder ein Abonnement zu kaufen.",
+                faqQ8: "Wie wird mich der Support kontaktieren?",
+                faqA8: "Der Support wird Sie per E-Mail kontaktieren. Jede Aktion, die mit Ihrem Geld durchgeführt wird, wird per E-Mail mitgeteilt.",
+                faqQ9: "Wie hoch ist die Erfolgsquote von Trades?",
+                faqA9: "95% Garantiert. Erfahrene Leute arbeiten im Hintergrund — wir wissen, was wir mit Ihrem Geld machen.",
+                faqQ10: "Kann ich meine Gelder jederzeit abheben?",
+                faqA10: "Sie können jederzeit abheben, auch wenn der Handel nicht abgeschlossen ist. Beachten Sie nur, dass Sie Geld verlieren, wenn Sie abheben, während sich der Handel in der mittleren Phase befindet. Versuchen Sie abzuheben, bevor die Handelsphase begonnen hat (1-2 Tage nach der Investition). Wir warten 3 Tage, bevor wir beginnen.",
+                faqQ11: "Wie schnell antwortet der Support?",
+                faqA11: "Wir antworten immer innerhalb von 48 Stunden. Wenn nicht, sind wir bereit, dem Benutzer je nach Investition über 5 $ zu geben.",
+                faqQ12: "Wie werde ich über Gewinne benachrichtigt?",
+                faqA12: "Jeder Gewinn wird per E-Mail mitgeteilt.",
+                faqQ13: "Werden Sie jemals nach meiner Wallet oder einer zusätzlichen Verifizierung fragen?",
+                faqA13: "Wir werden niemals nach Ihrer Wallet fragen. Wir haben KEIN Verifizierungssystem. Wir werden nach der Investition oder dem Abonnement nicht nach zusätzlichem Geld fragen.",
+                faqQ14: "Welche Gebühren fallen für Renditen an?",
+                faqA14: "2-3% des nach dem Handel zurückgegebenen Geldes gehören letztendlich uns, außer es handelt sich nicht um eine große Investition (über 15 $).",
+                faqQ15: "Sind die E-Mails automatisiert?",
+                faqA15: "E-Mails sind NICHT automatisiert.",
+                faqQ16: "Kann ich mein Abonnement kündigen?",
+                faqA16: "Sie können Ihr Abonnement jederzeit kostenlos kündigen.",
+                faqQ17: "Sind die Kryptopreise und -daten in Echtzeit?",
+                faqA17: "Jede Krypto hier basiert auf einer echten API und zeigt genaue Live-Informationen über die Krypto an.",
+                faqQ18: "Ist dies eine neue Plattform?",
+                faqA18: "Unsere Website und unser System sind derzeit neu erstellt.",
+                faqQ19: "Was ist ein Trade?",
+                faqA19: "Ein Trade ist im Grunde, wenn eine Person etwas kauft und eine andere Person es zum gleichen Preis verkauft. Sie wählen einen Vermögenswert, wie eine Aktie oder Krypto, und entscheiden, wann Sie kaufen oder verkaufen. Wenn Ihre Bestellung mit der Bestellung einer anderen Person übereinstimmt, schließt die Plattform den Handel ab und der Vermögenswert geht an den Käufer, während das Geld an den Verkäufer geht. Sie verdienen Geld, wenn der Preis steigt, nachdem Sie gekauft haben, und Sie es für mehr verkaufen, aber Sie verlieren Geld, wenn der Preis sinkt und Sie für weniger verkaufen.",
+                faqQ20: "Speichern Sie Handels- und Bestell-IDs?",
+                faqA20: "Wir speichern persönlich Handels-IDs und Bestell-IDs. Auf Anfrage können wir sie Ihnen geben."
+            },
+            es: {
+                navDash: "Panel",
+                navFaq: "Centro FAQ",
+                navSupport: "Soporte",
+                navSub: "Pagar Sub",
+                navExit: "SALIR",
+                statusLocked: "BLOQUEADO",
+                statusUnlocked: "DESBLOQUEADO",
+                authTitleReg: "Crear Cuenta",
+                authSubReg: "Inicializar Configuración de Perfil",
+                authSwitchLogin: "[ Cambiar a Inicio de Sesión Seguro ]",
+                authSwitchReg: "[ Cambiar a Registro ]",
+                authEmailPh: "CORREO ELECTRÓNICO SEGURO",
+                authPassPh: "CONTRASEÑA",
+                authPassConfPh: "CONFIRMAR CONTRASEÑA",
+                authBtnReg: "Crear Cuenta",
+                authBtnLogin: "Iniciar Sesión",
+                subBadge: "Activación Requerida",
+                subTitle: "Desbloquea el\nTerminal de Trading",
+                subPassTitle: "Pase Mensual",
+                subPassDesc: "Acceso a la Infraestructura de la Plataforma",
+                subGatewayTitle: "Puerta de Enlace Cripto",
+                subGatewayDesc: "Escanee o copie la dirección de pago",
+                subSendLabel: "Envía Exactamente $15 en ETH",
+                subBtnSubmit: "He Enviado los Fondos",
+                dashTitle: "Panel",
+                dashDesc: "Seleccione entre 150 criptomonedas reales analizadas por el motor.",
+                tabPop: "Top 75 Populares",
+                tabVol: "Top 75 Movimientos",
+                calcTitle: "Configuración de Operación",
+                calcAssetPrompt: "Seleccionar Activo",
+                deltaLabel: "Delta 24H",
+                investLabel: "Monto a Invertir:",
+                investYour: "Su Inversión:",
+                investProfit: "Ganancia Esperada:",
+                investFee: "Nuestra Tarifa del 5% (Solo Ganancias):",
+                investReturn: "Pago de Retorno:",
+                startTrading: "Comenzar a Operar",
+                faqTitle: "FAQ",
+                faqDesc: "Pautas de la plataforma, estructuras de pago e información de soporte.",
+                faqQ1: "¿Cuánto tiempo se tarda en recibir las ganancias?",
+                faqA1: "Normalmente se tardan entre 5 y 14 días en devolver el dinero negociado a su cuenta criptográfica, dependiendo de los gráficos del mercado. Realice un seguimiento de los datos en vivo en <a href=\"https://coinmarketcap.com/\" target=\"_blank\" class=\"text-[#00F0FF] hover:underline hover:text-white transition\">CoinMarketCap</a>.",
+                faqQ2: "¿A dónde van mis retiros?",
+                faqA2: "Por estrictas medidas de seguridad, todos los fondos y rendimientos generados se envían automáticamente a la cuenta criptográfica exacta desde la que se enviaron originalmente.",
+                faqQ3: "¿Existe una política de reembolso?",
+                faqA3: "Sí, ofrecemos una estricta garantía de devolución de dinero de 2 días en su depósito inicial si decide cancelar antes de que se ejecuten las operaciones.",
+                faqQ4: "¿Cómo rastreo mis inversiones activas?",
+                faqA4: "Recibirá una notificación automática por correo electrónico cada vez que nuestros operadores compren o vendan una moneda utilizando su capital invertido.",
+                faqQ5: "¿Cómo funciona la suscripción de acceso?",
+                faqA5: "La suscripción de acceso a la terminal debe renovarse todos los meses para mantener activas las capacidades de enrutamiento de fondos y el panel de control.",
+                faqQ6: "¿Cómo puedo contactar al soporte?",
+                faqA6: "Nuestro equipo de soporte está disponible 24/7. Use el botón \"Soporte\" en la navegación para abrir un ticket o envíe un correo electrónico a <b class=\"text-white\">nexustrading@gmail.com</b>.",
+                faqQ7: "¿Necesito pagar tarifas adicionales para invertir o comprar una suscripción?",
+                faqA7: "No, no necesita pagar tarifas adicionales para invertir o comprar una suscripción.",
+                faqQ8: "¿Cómo me contactará el soporte?",
+                faqA8: "El soporte se comunicará con usted en su correo electrónico. Cualquier acción realizada con su dinero se informará por correo electrónico.",
+                faqQ9: "¿Cuál es la tasa de éxito de las operaciones?",
+                faqA9: "95% Garantizado. Personas experimentadas trabajando en segundo plano: sabemos lo que estamos haciendo con su dinero.",
+                faqQ10: "¿Puedo retirar mis fondos en cualquier momento?",
+                faqA10: "Puede retirar en cualquier momento que desee, incluso si la operación no está completa. Solo sepa que si retira mientras la operación está en su fase intermedia perderá dinero. Intente retirar antes de que comience la fase de operación (1-2 días desde la inversión). Esperamos 3 días antes de comenzar.",
+                faqQ11: "¿Qué tan rápido responde el soporte?",
+                faqA11: "Siempre respondemos dentro de las 48 horas. Si no lo hacemos, estamos dispuestos a dar más de $5 al usuario dependiendo de la inversión.",
+                faqQ12: "¿Cómo seré notificado sobre las ganancias?",
+                faqA12: "Cada ganancia será notificada por correo electrónico.",
+                faqQ13: "¿Alguna vez pedirán mi billetera o verificación adicional?",
+                faqA13: "Nunca pediremos su billetera. NO tenemos un sistema de verificación. No pediremos dinero adicional después de la inversión o suscripción.",
+                faqQ14: "¿Qué tarifas se aplican a los retornos?",
+                faqA14: "El 2-3% del dinero devuelto después de la operación será eventualmente nuestro, excepto si no es una gran inversión (más de $15).",
+                faqQ15: "¿Los correos electrónicos son automáticos?",
+                faqA15: "Los correos electrónicos NO son automatizados.",
+                faqQ16: "¿Puedo cancelar mi suscripción?",
+                faqA16: "Siempre puede cancelar su suscripción en cualquier momento de forma gratuita.",
+                faqQ17: "¿Los precios y datos de las criptomonedas son en tiempo real?",
+                faqA17: "Cada cripto aquí se basa en una API real y muestra información exacta sobre la cripto EN VIVO.",
+                faqQ18: "¿Es esta una plataforma nueva?",
+                faqA18: "Nuestro sitio web y sistema son actualmente nuevos.",
+                faqQ19: "¿Qué es una operación (trade)?",
+                faqA19: "Un trade es básicamente cuando una persona compra algo y otra lo vende al mismo precio. Eliges un activo, como una acción o cripto, y decides cuándo comprar o vender. Si tu orden coincide con la de otra persona, la plataforma completa la operación y el activo pasa al comprador mientras el dinero va al vendedor. Ganas dinero si el precio sube después de comprar y vendes por más, pero pierdes si el precio baja y vendes por menos.",
+                faqQ20: "¿Almacenan las identificaciones comerciales y de pedidos?",
+                faqA20: "Personalmente almacenamos IDs comerciales e IDs de pedidos. Si se solicita, podemos dárselos."
+            },
+            fr: {
+                navDash: "Tableau de bord",
+                navFaq: "Centre FAQ",
+                navSupport: "Support",
+                navSub: "Payer Sub",
+                navExit: "DÉCO",
+                statusLocked: "VERROUILLÉ",
+                statusUnlocked: " DÉVERROUILLÉ",
+                authTitleReg: "Créer un Compte",
+                authSubReg: "Initialiser la Configuration du Profil",
+                authSwitchLogin: "[ Passer à la Connexion Sécurisée ]",
+                authSwitchReg: "[ Passer à l'Inscription ]",
+                authEmailPh: "ADRESSE EMAIL SÉCURISÉE",
+                authPassPh: "MOT DE PASSE",
+                authPassConfPh: "CONFIRMER LE MOT DE PASSE",
+                authBtnReg: "Créer un Compte",
+                authBtnLogin: "Connexion",
+                subBadge: "Activation Requise",
+                subTitle: "Déverrouillez le\nTerminal de Trading",
+                subPassTitle: "Pass Mensuel",
+                subPassDesc: "Accès à l'Infrastructure de la Plateforme",
+                subGatewayTitle: "Passerelle Crypto",
+                subGatewayDesc: "Scannez ou copiez l'adresse de paiement",
+                subSendLabel: "Envoyez Exactement 15 $ en ETH",
+                subBtnSubmit: "J'ai Envoyé les Fonds",
+                dashTitle: "Tableau de bord",
+                dashDesc: "Choisissez parmi 150 cryptomonnaies réelles analysées par le moteur.",
+                tabPop: "Top 75 Populaires",
+                tabVol: "Top 75 Actifs",
+                calcTitle: "Paramètres de Trading",
+                calcAssetPrompt: "Sélectionner Actif",
+                deltaLabel: "Delta 24H",
+                investLabel: "Montant à Investir :",
+                investYour: "Votre Investissement :",
+                investProfit: "Profit Attendu :",
+                investFee: "Frais de 5% (Gains Seulement) :",
+                investReturn: "Paiement du Retour :",
+                startTrading: "Commencer à Trader",
+                faqTitle: "FAQ",
+                faqDesc: "Directives de la plateforme, structures de paiement et informations de support.",
+                faqQ1: "Combien de temps faut-il pour recevoir les retours ?",
+                faqA1: "Il faut généralement environ 5 à 14 jours pour récupérer l'argent échangé sur votre compte crypto, en fonction des graphiques du marché. Suivez les données en direct sur <a href=\"https://coinmarketcap.com/\" target=\"_blank\" class=\"text-[#00F0FF] hover:underline hover:text-white transition\">CoinMarketCap</a>.",
+                faqQ2: "Où vont mes retraits ?",
+                faqA2: "Pour des mesures de sécurité strictes, tous les fonds et rendements générés sont automatiquement renvoyés directement au compte crypto exact d'où ils ont été envoyés à l'origine.",
+                faqQ3: "Y a-t-il une politique de remboursement ?",
+                faqA3: "Oui, nous offrons une garantie stricte de remboursement de 2 jours sur votre dépôt initial si vous choisissez d'annuler avant l'exécution des transactions.",
+                faqQ4: "Comment suivre mes investissements actifs ?",
+                faqA4: "Vous recevrez une notification par e-mail automatique chaque fois que nos traders achètent ou vendent une pièce en utilisant votre capital investi.",
+                faqQ5: "Comment fonctionne l'abonnement d'accès ?",
+                faqA5: "L'abonnement d'accès au terminal doit être renouvelé chaque mois pour maintenir le routage des fonds actif et les capacités du tableau de bord.",
+                faqQ6: "Comment puis-je contacter le support ?",
+                faqA6: "Notre équipe d'assistance est disponible 24/7. Utilisez le bouton \"Support\" dans la navigation pour ouvrir un ticket, ou envoyez un e-mail à <b class=\"text-white\">nexustrading@gmail.com</b>.",
+                faqQ7: "Dois-je payer des frais supplémentaires pour investir ou acheter un abonnement ?",
+                faqA7: "Non, vous n'avez pas besoin de payer de frais supplémentaires pour investir ou acheter un abonnement.",
+                faqQ8: "Comment le support me contactera-t-il ?",
+                faqA8: "L'assistance vous contactera sur votre e-mail. Toute action entreprise sur votre argent sera signalée par e-mail.",
+                faqQ9: "Quel est le taux de réussite des transactions ?",
+                faqA9: "95% Garanti. Des personnes expérimentées travaillant en arrière-plan — nous savons ce que nous faisons avec votre argent.",
+                faqQ10: "Puis-je retirer mes fonds à tout moment ?",
+                faqA10: "Vous pouvez retirer à tout moment, même si la transaction n'est pas terminée. Sachez simplement que si vous retirez alors que la transaction est dans sa phase intermédiaire, vous perdrez de l'argent. Essayez de retirer avant le début de la phase de transaction (1 à 2 jours après l'investissement). Nous attendons 3 jours avant de commencer.",
+                faqQ11: "À quelle vitesse le support répond-il ?",
+                faqA11: "Nous répondons toujours dans les 48 heures. Si ce n'est pas le cas, nous sommes prêts à donner plus de 5 $ à l'utilisateur en fonction de l'investissement.",
+                faqQ12: "Comment serai-je informé des bénéfices ?",
+                faqA12: "Chaque bénéfice sera communiqué par e-mail.",
+                faqQ13: "Demanderez-vous un jour mon portefeuille ou une vérification supplémentaire ?",
+                faqA13: "Nous ne vous demanderons jamais votre portefeuille. Nous n'avons PAS de système de vérification. Nous ne demanderons pas d'argent supplémentaire après l'investissement ou l'abonnement.",
+                faqQ14: "Quels frais s'appliquent aux retours ?",
+                faqA14: "2 à 3 % de l'argent rendu après la transaction sera éventuellement le nôtre, sauf s'il ne s'agit pas d'un gros investissement (plus de 15 $).",
+                faqQ15: "Les e-mails sont-ils automatisés ?",
+                faqA15: "Les e-mails NE SONT PAS automatisés.",
+                faqQ16: "Puis-je annuler mon abonnement ?",
+                faqA16: "Vous pouvez toujours annuler votre abonnement à tout moment gratuitement.",
+                faqQ17: "Les prix et données des cryptomonnaies sont-ils en temps réel ?",
+                faqA17: "Chaque crypto ici est basée sur une API réelle et affiche des informations exactes sur la crypto EN DIRECT.",
+                faqQ18: "S'agit-il d'une nouvelle plateforme ?",
+                faqA18: "Notre site Web et notre système sont actuellement nouvellement créés.",
+                faqQ19: "Qu'est-ce qu'un trade (transaction) ?",
+                faqA19: "Un trade, c'est fondamentalement lorsqu'une personne achète quelque chose et qu'une autre personne le vend au même prix. Vous choisissez un actif, comme une action ou une crypto, et décidez quand acheter ou vendre. Si votre ordre correspond à celui de quelqu'un d'autre, la plateforme termine la transaction et l'actif va à l'acheteur tandis que l'argent va au vendeur. Vous gagnez de l'argent si le prix augmente après votre achat et que vous le vendez plus cher, mais vous perdez de l'argent si le prix baisse et que vous le vendez moins cher.",
+                faqQ20: "Conservez-vous les identifiants de transaction et de commande ?",
+                faqA20: "Nous stockons personnellement les ID de transaction et de commande. Sur demande, nous pouvons vous les fournir."
+            }
+        };
+
+        function changeLanguage(lang) {
+            const t = translations[lang] || translations['en'];
+            
+            // Header / Nav
+            if(document.getElementById('nav-dash')) document.getElementById('nav-dash').innerText = t.navDash;
+            if(document.getElementById('nav-faq')) document.getElementById('nav-faq').innerText = t.navFaq;
+            if(document.getElementById('mobile-nav-dash')) document.getElementById('mobile-nav-dash').innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>${t.navDash}`;
+            if(document.getElementById('mobile-nav-faq')) document.getElementById('mobile-nav-faq').innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${t.navFaq}`;
+
+            // Auth View
+            if(document.getElementById('auth-title')) document.getElementById('auth-title').innerText = isLoginMode ? t.authBtnLogin : t.authTitleReg;
+            if(document.getElementById('auth-subtitle')) document.getElementById('auth-subtitle').innerText = t.authSubReg;
+            if(document.getElementById('auth-toggle-btn')) document.getElementById('auth-toggle-btn').innerText = isLoginMode ? t.authSwitchReg : t.authSwitchLogin;
+            if(document.getElementById('auth-email')) document.getElementById('auth-email').placeholder = t.authEmailPh;
+            if(document.getElementById('auth-pass')) document.getElementById('auth-pass').placeholder = t.authPassPh;
+            if(document.getElementById('auth-pass-confirm')) document.getElementById('auth-pass-confirm').placeholder = t.authPassConfPh;
+            if(document.getElementById('auth-submit-btn')) document.getElementById('auth-submit-btn').innerText = isLoginMode ? t.authBtnLogin : t.authBtnReg;
+
+            // Sub View
+            if(document.getElementById('sub-badge-text')) document.getElementById('sub-badge-text').innerText = t.subBadge;
+            if(document.getElementById('sub-main-title')) document.getElementById('sub-main-title').innerHTML = t.subTitle.replace('\n', '<br>');
+            if(document.getElementById('sub-pass-title')) document.getElementById('sub-pass-title').innerText = t.subPassTitle;
+            if(document.getElementById('sub-pass-desc')) document.getElementById('sub-pass-desc').innerText = t.subPassDesc;
+            if(document.getElementById('sub-gateway-title')) document.getElementById('sub-gateway-title').innerText = t.subGatewayTitle;
+            if(document.getElementById('sub-gateway-desc')) document.getElementById('sub-gateway-desc').innerText = t.subGatewayDesc;
+            if(document.getElementById('sub-send-label')) document.getElementById('sub-send-label').innerText = t.subSendLabel;
+            if(document.getElementById('sub-btn-submit')) document.getElementById('sub-btn-submit').innerText = t.subBtnSubmit;
+
+            // Dashboard View
+            if(document.getElementById('dash-main-title')) document.getElementById('dash-main-title').innerText = t.dashTitle;
+            if(document.getElementById('dash-main-desc')) document.getElementById('dash-main-desc').innerText = t.dashDesc;
+            if(document.getElementById('tab-pop')) document.getElementById('tab-pop').innerText = t.tabPop;
+            if(document.getElementById('tab-vol')) document.getElementById('tab-vol').innerText = t.tabVol;
+            if(document.getElementById('calc-settings-title')) document.getElementById('calc-settings-title').innerText = t.calcTitle;
+            if(document.getElementById('calc-ph')) document.getElementById('calc-ph').innerText = t.calcAssetPrompt;
+            if(document.getElementById('calc-delta-label')) document.getElementById('calc-delta-label').innerText = t.deltaLabel;
+            if(document.getElementById('invest-amount-label')) document.getElementById('invest-amount-label').innerText = t.investLabel;
+            if(document.getElementById('math-invest-label')) document.getElementById('math-invest-label').innerText = t.investYour;
+            if(document.getElementById('math-profit-label')) document.getElementById('math-profit-label').innerText = t.investProfit;
+            if(document.getElementById('math-fee-label')) document.getElementById('math-fee-label').innerText = t.investFee;
+            if(document.getElementById('math-return-label')) document.getElementById('math-return-label').innerText = t.investReturn;
+            if(document.getElementById('start-trading-btn')) document.getElementById('start-trading-btn').innerText = t.startTrading;
+
+            // FAQ View
+            if(document.getElementById('faq-main-title')) document.getElementById('faq-main-title').innerText = t.faqTitle;
+            if(document.getElementById('faq-main-desc')) document.getElementById('faq-main-desc').innerText = t.faqDesc;
+
+            // Individual FAQ Questions and Answers
+            for (let i = 1; i <= 20; i++) {
+                const qEl = document.getElementById('faq-q' + i);
+                const aEl = document.getElementById('faq-a' + i);
+                if(qEl && t['faqQ' + i]) qEl.innerText = t['faqQ' + i];
+                if(aEl && t['faqA' + i]) aEl.innerHTML = t['faqA' + i];
+            }
+        }
 
         async function syncFirebaseUsers() {
             try {
@@ -631,6 +1199,9 @@
                 btn.classList.replace('text-[#00F0FF]', 'text-slate-500');
             });
 
+            const lang = document.getElementById('lang-select').value;
+            const t = translations[lang] || translations['en'];
+
             if(viewId === 'view-dashboard') {
                 document.getElementById('nav-dash').classList.replace('text-slate-500', 'text-[#00F0FF]');
                 document.getElementById('nav-faq').classList.replace('text-[#00F0FF]', 'text-slate-500');
@@ -647,11 +1218,14 @@
 
         window.toggleAuthMode = function() {
             isLoginMode = !isLoginMode;
-            document.getElementById('auth-title').innerText = isLoginMode ? "Secure Login" : "Create Account";
+            const lang = document.getElementById('lang-select').value;
+            const t = translations[lang] || translations['en'];
+
+            document.getElementById('auth-title').innerText = isLoginMode ? t.authBtnLogin : t.authTitleReg;
             document.getElementById('auth-user').style.display = isLoginMode ? "none" : "block";
             document.getElementById('auth-pass-confirm').style.display = isLoginMode ? "none" : "block";
-            document.getElementById('auth-submit-btn').innerText = isLoginMode ? "Login" : "Create Account";
-            document.getElementById('auth-toggle-btn').innerText = isLoginMode ? "[ Switch to Register ]" : "[ Switch to Secure Login ]";
+            document.getElementById('auth-submit-btn').innerText = isLoginMode ? t.authBtnLogin : t.authBtnReg;
+            document.getElementById('auth-toggle-btn').innerText = isLoginMode ? t.authSwitchReg : t.authSwitchLogin;
             
             document.getElementById('auth-user').required = !isLoginMode;
             document.getElementById('auth-pass-confirm').required = !isLoginMode;
@@ -667,7 +1241,10 @@
                 mobileNav.classList.add('hidden');
             }
 
-            document.getElementById('status-badge').innerText = "LOCKED";
+            const lang = document.getElementById('lang-select').value;
+            const t = translations[lang] || translations['en'];
+
+            document.getElementById('status-badge').innerText = t.statusLocked;
             document.getElementById('status-badge').className = "text-xs font-mono px-3 py-1.5 border border-[#FF003C]/40 text-[#FF003C] bg-[#FF003C]/10 uppercase font-bold shadow-[0_0_12px_rgba(255,0,60,0.15)] flex-shrink-0 text-center";
             navTo('view-auth');
         };
@@ -726,17 +1303,19 @@
             if(!activeUser) return;
             const badge = document.getElementById('status-badge');
             const mobileNav = document.getElementById('mobile-nav');
+            const lang = document.getElementById('lang-select').value;
+            const t = translations[lang] || translations['en'];
             
             if(activeUser.status === 'unauthorized') {
                 navTo('view-sub');
-                badge.innerText = "LOCKED";
+                badge.innerText = t.statusLocked;
                 badge.className = "text-xs font-mono px-3 py-1.5 rounded border border-red-500/50 text-red-400 bg-red-500/10 uppercase font-bold flex-shrink-0 text-center";
                 if(mobileNav) {
                     mobileNav.classList.remove('flex');
                     mobileNav.classList.add('hidden');
                 }
             } else if (activeUser.status === 'approved') {
-                badge.innerText = "UNLOCKED";
+                badge.innerText = t.statusUnlocked;
                 badge.className = "text-xs font-mono px-3 py-1.5 rounded border border-[#00F0FF]/50 text-[#00F0FF] bg-[#00F0FF]/10 uppercase font-bold shadow-[0_0_15px_rgba(0,240,255,0.25)] flex-shrink-0 text-center";
                 
                 if(mobileNav) {
